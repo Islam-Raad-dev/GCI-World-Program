@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np  # type: ignore
 
 a = np.array([1, 3, 5, 15, 30, 25])
 

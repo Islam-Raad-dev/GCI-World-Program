@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np  # type: ignore
 
 #-----------------------<Practice Question 2-1>--------------------------
 
