@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def homework(anime_data, metric_column, n):
     df = anime_data.copy()
 
