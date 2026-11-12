@@ -1,0 +1,8 @@
+id,name,description,n_features,cv_auc_mean,cv_auc_std,cv_acc_mean,train_auc,train_acc,test_auc,test_acc,test_precision,test_recall,test_f1,test_top10_precision,train_test_acc_gap_pp,fit_time_sec
+M0,Dummy Majority Baseline,Predicts majority class (stayed=0),98,0.5,0.0,0.5044,0.5,0.5044,0.5,0.5044,0.0,0.0,0.0,0.4956,0.0,0.4
+M1,Logistic Regression (Pipeline),"Linear baseline (impute + scale + OHE, 107 fair features)",107,0.6605,0.0041,0.6156,0.6654,0.6192,0.6616,0.6172,0.6086,0.6376,0.6228,0.7287,0.21,117.2
+M2,Shallow Decision Tree (depth=4),"Rule-based explanation model (max_depth=4, 107 fair features)",107,0.6411,0.0028,0.5931,0.6446,0.5977,0.6406,0.5956,0.6061,0.5258,0.5631,0.7313,0.21,10.7
+M3,XGBoost (Tutorial Baseline),"98 raw features, LabelEncoder, depth=6, lr=0.05, n=300",98,0.694,0.0016,0.6395,0.8151,0.7349,0.6938,0.6357,0.6288,0.6468,0.6377,0.7917,9.92,126.2
+M4,XGBoost + Engineered Features,"107 fair features (20 engineered, -10 dups, no ethnic), depth=6, lr=0.05, n=300",107,0.7001,0.0024,0.6423,0.8213,0.74,0.6984,0.6386,0.6352,0.6365,0.6358,0.8073,10.14,164.4
+M5,XGBoost Regularized & Tuned,"107 fair features, depth=5, lr=0.03, n=550, subsample=0.8, colsample=0.8, min_child_weight=20",107,0.7013,0.0018,0.6433,0.7656,0.6936,0.7011,0.6413,0.6387,0.6361,0.6374,0.81,5.23,178.5
+M6,LightGBM (Gradient Boosted Trees),"107 fair features, num_leaves=31, lr=0.03, n=500, subsample=0.8",107,0.7002,0.0017,0.6425,0.7884,0.7117,0.701,0.6409,0.6366,0.6419,0.6393,0.8167,7.07,172.0

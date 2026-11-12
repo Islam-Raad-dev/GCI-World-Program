@@ -1,0 +1,7 @@
+parameter,low_net_mu,high_net_mu,base_net_mu,swing_mu
+Intervention Success Rate (s: 12% vs 28%),53363.0,224513.0,138938.0,171150.0
+Real Churn Base Rate (π_real: 5% vs 15%),47260.0,210163.0,138938.0,162903.0
+Retained Horizon (H: 5m vs 11m),58711.0,219165.0,138938.0,160454.0
+Customer ARPU (Median 48.2 vs P75 70.8 MU),100610.0,182768.0,138938.0,82158.0
+Offer Cost per Customer (c: 10.5 MU vs 4.5 MU),108938.0,168938.0,138938.0,60000.0
+Targeting Cutoff (k: 20% vs 15%),176859.0,158589.0,138938.0,18270.0

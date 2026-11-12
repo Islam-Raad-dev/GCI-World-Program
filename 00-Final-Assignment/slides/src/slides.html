@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Company A Telecom Churn PoC — Islam Raad</title>
+<style>
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    font-family: 'Inter', 'DejaVu Sans', 'Segoe UI', Arial, sans-serif;
+    background: #0F172A;
+    color: #0F172A;
+    margin: 0;
+    padding: 0;
+  }
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 64px 32px 64px;
+  }
+  .slide.cover-slide {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 65%, #0F2942 100%);
+    color: #FFFFFF;
+    padding: 72px 88px 56px 88px;
+  }
+  /* Header Bar */
+  .slide-header {
+    border-bottom: 3px solid #E2E8F0;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .section-tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #1D4ED8;
+    background: #DBEAFE;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .section-tag.teal { color: #0F766E; background: #CCFBF1; }
+  .section-tag.coral { color: #BE123C; background: #FFE4E6; }
+  .section-tag.amber { color: #B45309; background: #FEF3C7; }
+  .action-title {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.22;
+    color: #0F172A;
+  }
+  .action-title .accent-coral { color: #E11D48; }
+  .action-title .accent-teal { color: #0D9488; }
+  .action-title .accent-blue { color: #1D4ED8; }
+
+  /* Main Content Grid */
+  .slide-body {
+    flex: 1;
+    display: grid;
+    gap: 28px;
+    align-items: stretch;
+    min-height: 0;
+  }
+  .cols-60-40 { grid-template-columns: 1.42fr 1fr; }
+  .cols-55-45 { grid-template-columns: 1.22fr 1fr; }
+  .cols-50-50 { grid-template-columns: 1fr 1fr; }
+  .cols-45-55 { grid-template-columns: 1fr 1.25fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .rows-auto { display: flex; flex-direction: column; gap: 18px; }
+
+  /* Cards & Panels */
+  .card {
+    background: #F8FAFC;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .card.white { background: #FFFFFF; }
+  .card.navy { background: #0F172A; color: #FFFFFF; border-color: #1E293B; }
+  .card.teal-tint { background: #F0FDF4; border-color: #5EEAD4; }
+  .card.coral-tint { background: #FFF1F2; border-color: #FDA4AF; }
+  .card.blue-tint { background: #EFF6FF; border-color: #93C5FD; }
+  .card.amber-tint { background: #FFFBEB; border-color: #FCD34D; }
+
+  .card-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card.navy .card-title { color: #38BDF8; }
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .kpi-box {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-left: 6px solid #1D4ED8;
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .kpi-box.coral { border-left-color: #E11D48; }
+  .kpi-box.teal { border-left-color: #0D9488; }
+  .kpi-box.amber { border-left-color: #D97706; }
+  .kpi-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.1;
+  }
+  .kpi-num.coral { color: #E11D48; }
+  .kpi-num.teal { color: #0D9488; }
+  .kpi-num.blue { color: #1D4ED8; }
+  .kpi-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #475569;
+    margin-top: 4px;
+  }
+  .kpi-sub {
+    font-size: 12.5px;
+    color: #64748B;
+    margin-top: 3px;
+  }
+
+  ul.clean-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  ul.clean-list li {
+    font-size: 16.5px;
+    line-height: 1.42;
+    color: #1E293B;
+    padding-left: 20px;
+    position: relative;
+  }
+  ul.clean-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #1D4ED8;
+    font-weight: 800;
+  }
+  .card.navy ul.clean-list li { color: #E2E8F0; }
+  .card.navy ul.clean-list li::before { color: #38BDF8; }
+
+  /* Images & Figures */
+  .fig-box {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .fig-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .fig-caption {
+    font-size: 12.5px;
+    color: #475569;
+    margin-top: 6px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* Tables */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  table.data-table th {
+    background: #0F172A;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-align: left;
+    padding: 9px 12px;
+    font-size: 13.5px;
+  }
+  table.data-table th.num, table.data-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  table.data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #1E293B;
+    vertical-align: middle;
+  }
+  table.data-table tr:nth-child(even) { background: #F8FAFC; }
+  table.data-table tr.highlight-row {
+    background: #CCFBF1 !important;
+    border-top: 2px solid #0D9488;
+    border-bottom: 2px solid #0D9488;
+  }
+  table.data-table tr.baseline-row {
+    background: #FEF3C7 !important;
+  }
+  .sub-td {
+    font-size: 12px;
+    color: #475569;
+    font-weight: 400;
+  }
+  .badge-best {
+    display: inline-block;
+    background: #0D9488;
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+  .badge-base {
+    display: inline-block;
+    background: #D97706;
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+
+  /* Footer & So-What Bar */
+  .slide-footer {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sowhat-bar {
+    background: #0F172A;
+    color: #F8FAFC;
+    padding: 11px 20px;
+    border-radius: 8px;
+    border-left: 6px solid #0D9488;
+    font-size: 15.5px;
+    line-height: 1.35;
+  }
+  .sowhat-bar strong { color: #5EEAD4; }
+  .meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    color: #64748B;
+    font-weight: 600;
+  }
+  .formula-box {
+    background: #0F172A;
+    color: #F8FAFC;
+    padding: 16px 22px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+    border: 1.5px solid #38BDF8;
+    margin: 8px 0;
+  }
+  .ref-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 26px;
+    margin-top: 6px;
+  }
+  .ref-item {
+    font-size: 13.2px;
+    line-height: 1.38;
+    color: #1E293B;
+    background: #F8FAFC;
+    border-left: 3.5px solid #1D4ED8;
+    padding: 7px 12px;
+    border-radius: 4px;
+    word-break: break-word;
+  }
+  code {
+    font-family: 'JetBrains Mono', 'DejaVu Sans Mono', monospace;
+    font-size: 0.91em;
+    background: rgba(148, 163, 184, 0.18);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: COVER ==================== -->
+<section class="slide cover-slide">
+  <div>
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:28px;">
+      <span style="background:#0D9488; color:#FFFFFF; font-weight:800; font-size:14px; padding:6px 14px; border-radius:6px; letter-spacing:1.2px;">GCI WORLD 2026 SEPTEMBER — FINAL ASSIGNMENT</span>
+      <span style="background:#1E293B; color:#94A3B8; font-weight:700; font-size:14px; padding:6px 14px; border-radius:6px; border:1px solid #334155;">COMPANY A TELECOM POC [13]</span>
+    </div>
+    <h1 style="font-size:43px; font-weight:800; line-height:1.20; color:#FFFFFF; max-width:1720px; margin-bottom:22px;">
+      From Reactive Churn Firefighting to <span style="color:#5EEAD4;">Proactive Value Retention</span>:<br>
+      A Risk-Ranked Lifecycle &amp; Usage-Rescue PoC for Company A
+    </h1>
+    <p style="font-size:22px; line-height:1.45; color:#CBD5E1; max-width:1500px; margin-bottom:44px;">
+      Combining regularized gradient-boosted risk ranking (<strong>M5 XGBoost</strong>), pre-300-day handset lifecycle triggers, and Bayes prior-shift calibration to protect recurring contribution margin in a saturated mobile market.
+    </p>
+
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:26px; margin-top:16px;">
+      <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(94,234,212,0.4); border-top:5px solid #0D9488; border-radius:12px; padding:24px 28px;">
+        <div style="font-size:14px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:1px;">1. Empirical Audit Scope [13]</div>
+        <div style="font-size:42px; font-weight:800; color:#5EEAD4; margin:8px 0;">100,000 Subscribers</div>
+        <div style="font-size:16px; color:#E2E8F0; line-height:1.4;">100 merged columns (<code>Client.csv</code> &#8904; <code>Record.csv</code>); 49.56% case-control sample churn rate audited with zero data leakage (70/30 split, SEED=42).</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(56,189,248,0.4); border-top:5px solid #38BDF8; border-radius:12px; padding:24px 28px;">
+        <div style="font-size:14px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:1px;">2. Predictive &amp; Decile Lift [10, 12]</div>
+        <div style="font-size:42px; font-weight:800; color:#38BDF8; margin:8px 0;">0.7011 Test AUC</div>
+        <div style="font-size:16px; color:#E2E8F0; line-height:1.4;">Up from 0.6938 tutorial baseline (+64.13% vs. 63.57% accuracy), cutting overfitting in half while achieving <strong>81.0% sample precision</strong> (32.5% re-based at 10% prior) in the Top-10% tier.</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(251,191,36,0.4); border-top:5px solid #F59E0B; border-radius:12px; padding:24px 28px;">
+        <div style="font-size:14px; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:1px;">3. Re-Based Financial Impact [8, 9]</div>
+        <div style="font-size:42px; font-weight:800; color:#FBBF24; margin:8px 0;">+138,938 MU</div>
+        <div style="font-size:16px; color:#E2E8F0; line-height:1.4;">Estimated annual Base Case net impact (+27,418 MU Conservative to +329,786 MU Optimistic) at Top-10% targeting after prior-shift re-basing and full offer costs.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #334155; padding-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:16px; color:#94A3B8;">
+    <div><strong>Author:</strong> Islam Raad (AI Engineering, University of Mosul) &nbsp;|&nbsp; <strong>Submission ID:</strong> ACCOUNT_NAME</div>
+    <div><strong>Date:</strong> November 2026 &nbsp;|&nbsp; <strong>Slide 1 / 15</strong></div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2: MARKET CONTEXT ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag">1. INDUSTRY &amp; REGIONAL CONTEXT</span>
+    <h2 class="action-title">With Iraq Mobile Penetration at <span class="accent-coral">100%–103%</span>, Retention Beats Acquisition on Unit Economics [1, 2, 6]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="rows-auto">
+      <div class="kpi-row">
+        <div class="kpi-box coral">
+          <div class="kpi-num coral">48.1M (103%)</div>
+          <div class="kpi-label">Iraq Active Mobile Lines [1]</div>
+          <div class="kpi-sub">Up from 46.0M (100.0%) in 2024; ITU reports 100.08/100 people [2]</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-num blue">427M (64%)</div>
+          <div class="kpi-label">MENA Unique Subscribers [3]</div>
+          <div class="kpi-sub">&gt;85%–90% prepaid mix in Iraq/Levant; widespread multi-SIM switching</div>
+        </div>
+        <div class="kpi-box teal">
+          <div class="kpi-num teal">+25% to +85%</div>
+          <div class="kpi-label">Profit Lift per 5 pp Churn Cut [6]</div>
+          <div class="kpi-sub">Reichheld &amp; Sasser (HBR): retention amortizes acquisition cost</div>
+        </div>
+      </div>
+
+      <div class="card white" style="flex:1;">
+        <div class="card-title">Competitive Reality in Iraq &amp; MENA Wireless Markets [1, 3, 4, 5]</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Operator / Benchmark</th>
+              <th class="num">Active Subscribers</th>
+              <th class="num">Market Share / Scale</th>
+              <th>Strategic Retention Challenge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Zain Iraq</strong> (Zain Group) [4]</td>
+              <td class="num">17.9M &ndash; 19.3M</td>
+              <td class="num">~37% &ndash; 42% share<br><span class="sub-td">USD 0.97B–1.1B rev</span></td>
+              <td>Protecting high-ARPU data &amp; voice users against dual-SIM promo switching.</td>
+            </tr>
+            <tr>
+              <td><strong>Asiacell</strong> (Ooredoo Group) [5]</td>
+              <td class="num">17.69M &ndash; 19.13M</td>
+              <td class="num">~38% &ndash; 40% share<br><span class="sub-td">QAR 4,452M rev (24.8 QAR ARPU)</span></td>
+              <td>Retaining +8.1% YoY subscriber influx absorbed from displaced regional lines.</td>
+            </tr>
+            <tr>
+              <td><strong>Korek Telecom</strong> [3, 5]</td>
+              <td class="num">Contracting base</td>
+              <td class="num">&lt;15% share</td>
+              <td>Regulatory/interconnection disputes triggered mass SIM migration across Iraq.</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>Company A Dataset</strong> (PoC Target) [7, 13]</td>
+              <td class="num"><strong>100,000</strong></td>
+              <td class="num"><strong>58.72 MU Mean ARPU</strong><br><span class="sub-td">48.20 MU Median ARPU</span></td>
+              <td><strong>49.56% case-control sample churn</strong> (real industry monthly/quarterly rate: <strong>5%–10%</strong> [7, 8]).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="card navy" style="flex:1;">
+        <div class="card-title">Why Blanket Retention Campaigns Fail in Telecom [7, 8]</div>
+        <ul class="clean-list">
+          <li><strong>Zero Greenfield Headroom:</strong> At 100.08 subscriptions per 100 people in Iraq [2], every "new" gross addition is either a secondary SIM or poached from a rival at high dealer commission and onboarding cost.</li>
+          <li><strong>Untargeted Discounts Destroy Margin:</strong> Offering a 10 MU monthly discount to all 100,000 subscribers costs 1,000,000 MU per wave—mostly subsidizing loyal customers who would have stayed anyway [8].</li>
+          <li><strong>Timing Beat Generosity:</strong> Once a subscriber zeroes out voice minutes (<code>mou_Mean == 0</code>) or swaps primary SIMs, churn reaches <strong>79.81%</strong> [13]—interventions must fire <em>before</em> disengagement completes.</li>
+          <li><strong>Unit Currency Convention:</strong> Because Company A's dataset is denominated in North American wireless billing scale (mean <code>rev_Mean</code> = 58.72 MU vs. ~6.80 USD in Iraq [5, 13]), all PoC financials are reported in <strong>Dataset Monetary Units (MU)</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> In a 100%+ penetrated market [1, 2], EBITDA growth depends on surgical retention—identifying the <strong>Top-10% highest-risk, positive-margin subscribers</strong> early enough to intervene profitably [7, 8].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [1] DataReportal Iraq 2025; [2] World Bank/ITU WDI; [3] GSMA MENA 2024; [4] Zain Group AR; [5] Ooredoo AR; [6] Reichheld &amp; Sasser (1990); [7] Neslin et al. (2006).</span>
+      <span>Slide 2 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3: DATA AUDIT & HYGIENE ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag">2. DATA AUDIT &amp; INTEGRITY</span>
+    <h2 class="action-title">100,000-Subscriber Audit Reveals <span class="accent-coral">Informative Missingness</span>, 10 Duplicate Pairs &amp; Unit Anomalies [13]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="fig-box">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/missing_top20.png" alt="Top 20 Columns by Missingness and Churn Rate Gap">
+      <div class="fig-caption">Figure 1: Top-20 columns by missingness (%) on <code>Client.csv</code> &#8904; <code>Record.csv</code> (N = 100,000) with churn-rate delta when missing vs. present [13].</div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="kpi-row">
+        <div class="kpi-box">
+          <div class="kpi-num blue">100,000 &times; 100</div>
+          <div class="kpi-label">Exact 1:1 Inner Join [13]</div>
+          <div class="kpi-sub">51 Record + 50 Client cols; 0 duplicate IDs (<code>1,000,001–1,100,000</code>)</div>
+        </div>
+        <div class="kpi-box coral">
+          <div class="kpi-num coral">76.09%</div>
+          <div class="kpi-label">Churn When <code>change_mou</code> Missing</div>
+          <div class="kpi-sub">n = 891 (+26.77 pp vs. present); <code>hnd_webcap</code> NaN = 59.15% churn</div>
+        </div>
+        <div class="kpi-box teal">
+          <div class="kpi-num teal">10 Cols Dropped</div>
+          <div class="kpi-label">Near-Duplicate Pairs (|&rho;| &gt; 0.995)</div>
+          <div class="kpi-sub">Dropping 10 redundant cols improves 5-fold CV AUC (0.6940 &rarr; 0.6947)</div>
+        </div>
+      </div>
+
+      <div class="card white" style="flex:1;">
+        <div class="card-title">Critical Audit Findings &amp; Documentation Discrepancies Fixed [13]</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Audit Dimension</th>
+              <th>Empirical Finding in Dataset</th>
+              <th>Pipeline Engineering Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. <code>change_mou</code> &amp; <code>change_rev</code> Units</strong></td>
+              <td>Overview docx calls them "% change", but <strong>22.79%</strong> of <code>change_mou</code> &lt; -100 (min -3,875) and <em>r</em> = <strong>0.9025</strong> with <code>mou_Mean - avg3mou</code> (raw difference).</td>
+              <td>Construct true relative ratios <code>mou_ratio_3m</code> and <code>rev_ratio_3m</code> alongside raw deltas.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Negative <code>eqpdays</code> Values</strong></td>
+              <td><strong>133 rows</strong> have <code>eqpdays &lt; 0</code> (min -5; 34 rows = -1, which causes <code>np.log1p</code> <code>RuntimeWarning</code> in <code>tutorial.ipynb</code>).</td>
+              <td>Add <code>eqpdays_negative_flag</code> and clamp <code>eqpdays_clean = max(eqpdays, 0)</code> before log/ratio transforms.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Correlated Missing Blocks</strong></td>
+              <td><strong>1,732 rows (1.73%)</strong> miss all 11 demographic fields (<code>truck</code>..<code>kid16_17</code>, 47.86% churn); <strong>2,839 rows</strong> miss <code>avg6*</code> (tenure &lt; 6m, 40.23% churn).</td>
+              <td>Create explicit missingness indicators (<code>missing_change_mou</code>, <code>missing_hnd_webcap</code>, <code>missing_avg6</code>, <code>missing_demo_block</code>).</td>
+            </tr>
+            <tr>
+              <td><strong>4. 20 Collinear Pairs (|&rho;| &gt; 0.98)</strong></td>
+              <td><code>totcalls</code>/<code>adjqty</code> (&rho;=0.9995), <code>totmou</code>/<code>adjmou</code> (&rho;=0.9995), <code>plcd_vce</code>/<code>attempt</code> (&rho;=0.9994), <code>comp_vce</code>/<code>complete</code> (&rho;=0.9992).</td>
+              <td>Drop 10 redundant duplicate columns to stabilize split gain and permutation importance.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Missing values in telecom billing logs are <strong>behavioral signals, not random noise</strong>—preserving missingness indicators and fixing <code>change_mou</code> scaling directly lifts ranking accuracy [13].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [13] GCI Company A Dataset (<code>Client.csv</code>, <code>Record.csv</code>) &amp; Overview Docx Audit (<code>outputs/tables/missing.csv</code>, <code>docs/data_doc_discrepancies.md</code>).</span>
+      <span>Slide 3 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4: EDA FINDING 1 (300-DAY CLIFF) ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag coral">3. EXPLORATORY DATA ANALYSIS — FINDING 1</span>
+    <h2 class="action-title">Churn Surges <span class="accent-coral">+23.83 pp</span> After Handset Age Crosses 300 Days (36.85% &rarr; 60.69%) [13]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="fig-box">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/eqpdays_churn.png" alt="Churn Rate by Equipment Days">
+      <div class="fig-caption">Figure 2: Churn rate across 25-day handset age (<code>eqpdays</code>) bins on the 70% training split (n = 70,000) with 95% Wilson confidence intervals [13].</div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="kpi-row">
+        <div class="kpi-box teal">
+          <div class="kpi-num teal">36.85%</div>
+          <div class="kpi-label">Pre-Threshold Churn (260–300d)</div>
+          <div class="kpi-sub">n = 4,792 train accounts (36.87% full dataset)</div>
+        </div>
+        <div class="kpi-box coral">
+          <div class="kpi-num coral">60.69%</div>
+          <div class="kpi-label">Post-Threshold Churn (301–340d)</div>
+          <div class="kpi-sub">n = 6,774 train accounts; peaks at 62.44% in 326–350d</div>
+        </div>
+        <div class="kpi-box amber">
+          <div class="kpi-num">+23.83 pp</div>
+          <div class="kpi-label">Verified Jump Across 300d</div>
+          <div class="kpi-sub">95% Boot CI: [+22.12, +25.62] pp | RD Jump: +23.88 pp</div>
+        </div>
+      </div>
+
+      <div class="card white" style="flex:1;">
+        <div class="card-title">Subgroup Robustness Audit Around the 300-Day Boundary (Train Split) [13]</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Customer Subgroup</th>
+              <th class="num">260–300d Churn (n)</th>
+              <th class="num">301–340d Churn (n)</th>
+              <th class="num">Jump (&Delta; pp)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td><strong>All Training Accounts</strong></td>
+              <td class="num">36.85% (4,792)</td>
+              <td class="num">60.69% (6,774)</td>
+              <td class="num"><strong>+23.83 pp</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Single-Handset Accounts (<code>phones == 1</code>)</strong></td>
+              <td class="num">29.10% (2,869)</td>
+              <td class="num">63.18% (4,932)</td>
+              <td class="num"><strong>+34.08 pp</strong></td>
+            </tr>
+            <tr>
+              <td><strong>New Handsets Only (<code>refurb_new == 'N'</code>)</strong></td>
+              <td class="num">34.23% (4,128)</td>
+              <td class="num">60.65% (6,087)</td>
+              <td class="num"><strong>+26.42 pp</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Tenure &ge; 10 Months Only (<code>months &ge; 10</code>)</strong></td>
+              <td class="num">41.23% (3,090)</td>
+              <td class="num">60.69% (6,774)</td>
+              <td class="num"><strong>+19.46 pp</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Prime Credit Tier (<code>crclscod == 'AA'</code>)</strong></td>
+              <td class="num">34.11% (1,897)</td>
+              <td class="num">63.42% (3,152)</td>
+              <td class="num"><strong>+29.31 pp</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Multi-Handset Accounts (<code>phones &ge; 2</code>)</strong></td>
+              <td class="num">48.41% (1,923)</td>
+              <td class="num">54.02% (1,842)</td>
+              <td class="num"><strong>+5.60 pp</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> <code>eqpdays</code> is the strongest single predictor in the dataset (univariate AUC = 0.5751), and the <strong>240–300 day pre-spike window</strong> provides a clear 60-day operational runway for proactive retention [13].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [13] Company A Dataset 70% Train Split (<code>outputs/tables/eqpdays_bins25.csv</code>, <code>outputs/tables/threshold_robustness.csv</code>).</span>
+      <span>Slide 4 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5: EDA FINDING 2 (TENURE-DEVICE ENTANGLEMENT) ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag coral">3. EXPLORATORY DATA ANALYSIS — FINDING 2</span>
+    <h2 class="action-title">The 300-Day Spike Coincides with the <span class="accent-coral">Months 10–12 Renewal Cliff</span>, Yet Device Age Persists Later [13]</h2>
+  </div>
+
+  <div class="slide-body cols-50-50">
+    <div class="fig-box">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/months_churn.png" alt="Churn Rate by Customer Tenure Months">
+      <div class="fig-caption">Figure 3: Churn rate by account tenure (<code>months</code> 6–36) showing the dramatic doubling from Month 9 (29.25%) to Month 11 (64.57%) [13].</div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="fig-box" style="flex:1;">
+        <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/tenure_device_heatmap.png" alt="2D Tenure x Device Age Heatmap">
+        <div class="fig-caption">Figure 4: 2D Churn Rate (%) &amp; Sample Size across Tenure (<code>months</code>) &times; Handset Age (<code>eqpdays</code>) on the 70% training split [13].</div>
+      </div>
+
+      <div class="card amber-tint">
+        <div class="card-title" style="font-size:16.5px;">Why Disentangling <code>months</code> and <code>eqpdays</code> Matters for Intervention Design [13]</div>
+        <ul class="clean-list" style="gap:6px;">
+          <li style="font-size:14.8px;"><strong>First-Year Coupling:</strong> On a subscriber's first handset (<code>phones == 1</code>), <code>eqpdays ≈ 30 × months</code>. Exactly <strong>0 customers</strong> have <code>months ≤ 9</code> and <code>eqpdays > 300</code> (max <code>eqpdays</code> for <code>months ≤ 9</code> is <strong>288 days</strong>). Thus, crossing 300 days on a first phone is also crossing into the <strong>Month 10–12 contract renewal cliff</strong> (29.25% &rarr; 64.57%).</li>
+          <li style="font-size:14.8px;"><strong>Independent Device-Age Effect in Mature Cohorts:</strong> Holding tenure fixed above 12 months, subscribers with a newer/upgraded handset (<code>≤200d</code>) churn far less than peers on aging handsets (<code>501d+</code>): <strong>39.2% vs. 55.0%</strong> in Months 19–24 (<strong>-15.7 pp</strong>) and <strong>33.2% vs. 57.1%</strong> in Months 25+ (<strong>-23.8 pp</strong>).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Because first-year contract renewal and handset aging co-move, our <strong>Lane 2 intervention pairs a Month 8–9 renewal check with a handset trade-in voucher</strong>, verified via an 80/20 holdout pilot [13].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [13] Company A Dataset 70% Train Split (<code>outputs/tables/tenure_months_churn.csv</code>, <code>outputs/tables/tenure_device_entanglement.csv</code>).</span>
+      <span>Slide 5 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6: EDA FINDING 3 (USAGE COLLAPSE, ARPU & FAIRNESS) ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag coral">3. EXPLORATORY DATA ANALYSIS — FINDING 3</span>
+    <h2 class="action-title">Zero-MOU Accounts Churn at <span class="accent-coral">79.81%</span> on Low ARPU (23.11 MU), Requiring Value-Gated Triage [13]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="fig-box">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/usage_segments.png" alt="Usage Collapse Segments Churn vs ARPU">
+      <div class="fig-caption">Figure 5: Churn rate (%) vs. Mean Monthly Revenue (<code>rev_Mean</code>, MU) across voice usage segments [13].</div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="card white">
+        <div class="card-title">Three Commercial Traps Uncovered by Segment &amp; Fairness Audits [13]</div>
+        <ul class="clean-list">
+          <li><strong>Trap 1 — The Dormant SIM Trap (<code>mou_Mean == 0</code>):</strong> The 1,615 zero-usage accounts churn at <strong>79.81%</strong> (78.48% train), making them easy for any ML model to flag. Yet their mean ARPU is only <strong>23.11 MU</strong> (median 17.14 MU, <strong>0.64% of total revenue</strong>). Spending 7.50–10.00 MU on human call-center outreach for already-silent SIMs destroys campaign ROI.</li>
+          <li><strong>Trap 2 — Mean ARPU Alone Is Blind (<code>rev_Mean</code>):</strong> Overall monthly revenue is virtually identical between churners (<strong>58.21 MU</strong> mean / 47.49 MU median) and stayers (<strong>59.22 MU</strong> mean / 48.88 MU median; <em>r</em> = -0.0109). What predicts churn is <em>relative usage trajectory</em> (<code>change_mou</code>, <code>mou_ratio_3m</code>) and <em>overage friction</em> (<code>ovrrev_Mean &gt; 20 MU</code> &rarr; 52.05% churn).</li>
+          <li><strong>Trap 3 — Demographic Disparity (<code>ethnic</code>):</strong> Raw churn across <code>ethnic</code> codes spans <strong>18.37 pp</strong> (Code <code>O</code>: <strong>58.08%</strong> vs. Code <code>Z</code>: <strong>39.71%</strong>). To prevent discriminatory offer allocation, we <strong>exclude <code>ethnic</code></strong> from production scoring—verified to cost only <strong>-0.0016 validation AUC</strong> (0.7073 &rarr; 0.7057).</li>
+        </ul>
+      </div>
+
+      <div class="kpi-row" style="margin-bottom:0;">
+        <div class="kpi-box coral">
+          <div class="kpi-num coral">79.81%</div>
+          <div class="kpi-label">Zero-MOU Churn (n=1,615)</div>
+          <div class="kpi-sub">ARPU = 23.11 MU &rarr; Automated SMS only</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-num blue">58.21 vs 59.22</div>
+          <div class="kpi-label">Churned vs Stayed Mean MU</div>
+          <div class="kpi-sub">Static ARPU cannot separate risk</div>
+        </div>
+        <div class="kpi-box teal">
+          <div class="kpi-num teal">-0.0016 AUC</div>
+          <div class="kpi-label">Cost of Dropping <code>ethnic</code></div>
+          <div class="kpi-sub">Fairness achieved with ~zero accuracy loss</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> High churn probability alone is not enough to trigger costly human outreach—offers must be gated by <strong>active value (<code>rev_Mean &ge; 30 MU</code>, <code>mou_Mean &gt; 0</code>)</strong> and <strong>fairness-audited features</strong> [8, 13].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [13] Company A Dataset (<code>outputs/tables/usage_collapse_segments.csv</code>, <code>outputs/tables/ethnic_fairness_audit.csv</code>).</span>
+      <span>Slide 6 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 7: PROBLEM FORMULATION & PIPELINE ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag teal">4. PROBLEM FORMULATION &amp; METHODOLOGY</span>
+    <h2 class="action-title">We Frame Retention as a <span class="accent-teal">Leakage-Safe Top-k% Risk-Ranking Engine</span> Linked to Two Action Lanes [8, 12]</h2>
+  </div>
+
+  <div class="slide-body rows-auto">
+    <div class="fig-box" style="height:355px; padding:6px 12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 340" width="100%" height="100%" font-family="Inter, DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#1D4ED8"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0D9488"/>
+    </marker>
+  </defs>
+
+  <!-- Background Card -->
+  <rect x="4" y="4" width="912" height="332" rx="12" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="24" y="34" font-size="16" font-weight="700" fill="#0F172A">End-to-End Leakage-Safe Analytical &amp; Decision Workflow (SEED = 42)</text>
+  <text x="24" y="54" font-size="12" fill="#475569">Every transformation, encoder, and threshold is fit strictly on the 70% training split; the 30% test split is touched once for final reporting.</text>
+
+  <!-- Step 1: Raw Data & Audit -->
+  <rect x="22" y="74" width="196" height="175" rx="10" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="22" y="74" width="196" height="32" rx="10" fill="#1D4ED8"/>
+  <text x="120" y="95" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">1. Data Audit &amp; 1:1 Join</text>
+  <text x="34" y="124" font-size="11.5" font-weight="700" fill="#0F172A">• Client.csv + Record.csv</text>
+  <text x="34" y="142" font-size="11" fill="#334155">  100,000 rows × 100 columns</text>
+  <text x="34" y="162" font-size="11.5" font-weight="700" fill="#0F172A">• Stratified 70/30 Split</text>
+  <text x="34" y="180" font-size="11" fill="#334155">  70,000 Train / 30,000 Test</text>
+  <text x="34" y="200" font-size="11.5" font-weight="700" fill="#E11D48">• Data Hygiene Fixes</text>
+  <text x="34" y="218" font-size="10.5" fill="#334155">  Clamp eqpdays &lt; 0 (133 rows)</text>
+  <text x="34" y="234" font-size="10.5" fill="#334155">  Drop 10 duplicate _Mean cols</text>
+
+  <line x1="218" y1="161" x2="244" y2="161" stroke="#1D4ED8" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 2: Domain Features & Fairness -->
+  <rect x="248" y="74" width="204" height="175" rx="10" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="248" y="74" width="204" height="32" rx="10" fill="#1D4ED8"/>
+  <text x="350" y="95" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">2. 20 Domain Features</text>
+  <text x="260" y="124" font-size="11.5" font-weight="700" fill="#0F172A">• Lifecycle &amp; Device Signals</text>
+  <text x="260" y="142" font-size="10.5" fill="#334155">  dev_age_gt_300, tenure_10_12</text>
+  <text x="260" y="157" font-size="10.5" fill="#334155">  eqp_per_tenure_day ratio</text>
+  <text x="260" y="177" font-size="11.5" font-weight="700" fill="#0F172A">• Usage Slump &amp; Friction</text>
+  <text x="260" y="195" font-size="10.5" fill="#334155">  mou_ratio_3m, care_intensity</text>
+  <text x="260" y="215" font-size="11.5" font-weight="700" fill="#0D9488">• Fairness Guardrail</text>
+  <text x="260" y="233" font-size="10.5" fill="#334155">  Exclude ethnic (107 fair cols)</text>
+
+  <line x1="452" y1="161" x2="478" y2="161" stroke="#1D4ED8" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 3: 5-Fold CV & Model Selection -->
+  <rect x="482" y="74" width="196" height="175" rx="10" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="482" y="74" width="196" height="32" rx="10" fill="#1D4ED8"/>
+  <text x="580" y="95" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">3. 5-Fold Stratified CV</text>
+  <text x="494" y="124" font-size="11.5" font-weight="700" fill="#0F172A">• 7 Candidate Models</text>
+  <text x="494" y="142" font-size="10.5" fill="#334155">  Dummy, LogReg, Shallow Tree,</text>
+  <text x="494" y="157" font-size="10.5" fill="#334155">  XGBoost (M3–M5), LightGBM (M6)</text>
+  <text x="494" y="177" font-size="11.5" font-weight="700" fill="#0F172A">• Overfitting Control</text>
+  <text x="494" y="195" font-size="10.5" fill="#334155">  depth=5, subsample=0.8,</text>
+  <text x="494" y="210" font-size="10.5" fill="#334155">  colsample=0.8, reg_lambda=2</text>
+  <text x="494" y="232" font-size="11" font-weight="700" fill="#0D9488">• Primary Metric: ROC-AUC</text>
+
+  <line x1="678" y1="161" x2="704" y2="161" stroke="#0D9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+
+  <!-- Step 4: Top-k Ranking & Re-basing -->
+  <rect x="708" y="74" width="190" height="175" rx="10" fill="#F0FDF4" stroke="#0D9488" stroke-width="2.2"/>
+  <rect x="708" y="74" width="190" height="32" rx="10" fill="#0D9488"/>
+  <text x="803" y="95" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF">4. Top-k% Profit Engine</text>
+  <text x="720" y="124" font-size="11.5" font-weight="700" fill="#0F172A">• Rank by Risk Score p̂_i</text>
+  <text x="720" y="142" font-size="10.5" fill="#334155">  Select Top-10% (10,000 accts)</text>
+  <text x="720" y="162" font-size="11.5" font-weight="700" fill="#0F172A">• Prior-Shift Re-basing</text>
+  <text x="720" y="180" font-size="10.5" fill="#334155">  Adjust 49.6% sample prior to</text>
+  <text x="720" y="195" font-size="10.5" fill="#334155">  realistic 5%–10% base rate</text>
+  <text x="720" y="215" font-size="11.5" font-weight="700" fill="#0D9488">• Two-Lane Intervention</text>
+  <text x="720" y="233" font-size="10.5" fill="#334155">  Matched to root risk driver</text>
+
+  <!-- Bottom Governance Banner -->
+  <rect x="22" y="266" width="876" height="52" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.2"/>
+  <text x="38" y="287" font-size="12" font-weight="700" fill="#1E3A8A">Why Probability Ranking Beats 0.5-Cutoff Classification:</text>
+  <text x="38" y="306" font-size="11.2" fill="#1E293B">A flat 0.5 cutoff flags ~15,000 test accounts regardless of campaign budget. Ranking by p̂_i lets CRM size contact volume k% to maximize net saved CLV minus offer cost.</text>
+</svg>
+    </div>
+
+    <div class="card white" style="flex:1; padding:14px 20px;">
+      <div class="card-title" style="font-size:17px; margin-bottom:6px;">Candidate Problem Formulation Decision Matrix (Evaluated Before Modeling) [7, 8, 13]</div>
+      <table class="data-table" style="font-size:13.8px;">
+        <thead>
+          <tr>
+            <th>Candidate Problem Framing</th>
+            <th>Primary Target &amp; Action</th>
+            <th class="num">Data Support (30%)</th>
+            <th class="num">Intervenability (25%)</th>
+            <th class="num">Net Impact (25%)</th>
+            <th class="num">Causal Rigor (20%)</th>
+            <th class="num">Weighted Score</th>
+            <th>Strategic Role in Proposal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td><strong>P1. Proactive Top-10% Risk-Ranked Retention Engine</strong></td>
+            <td>Rank all 100k users by p&#770;<sub>i</sub>; target Top-10% (<code>rev_Mean &ge; 30 MU</code>)</td>
+            <td class="num">5.0 / 5</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num">5.0 / 5</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num"><strong>4.78 / 5.00</strong></td>
+            <td><strong>Primary Core Architecture (Lane 1 + Scoring Engine)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>P2. Pre-300-Day Handset Refresh &amp; Month 8–9 Renewal Pilot</strong></td>
+            <td>Target <code>eqpdays</code> in [240, 300]d (<code>n = 8,815</code>, ARPU 66.91 MU)</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num">4.0 / 5</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num"><strong>4.38 / 5.00</strong></td>
+            <td><strong>Integrated as Dedicated Lifecycle Track (Lane 2 Pilot)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>P3. Dormant / Zero-MOU Account Reactivation Triage</strong></td>
+            <td>Target <code>mou_Mean &le; 10</code> (<code>n = 3,848</code>, ARPU 24.00 MU)</td>
+            <td class="num">4.5 / 5</td>
+            <td class="num">2.5 / 5</td>
+            <td class="num">2.5 / 5</td>
+            <td class="num">4.0 / 5</td>
+            <td class="num"><strong>3.40 / 5.00</strong></td>
+            <td><strong>Automated Low-Cost Digital/SMS Guardrail Only</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Combining <strong>P1 (Top-10% ML Risk Ranking)</strong> with <strong>P2 (Pre-300-Day Lifecycle Trigger)</strong> and a <strong>P3 Dormant-Account Cost Filter</strong> maximizes protected CLV per MU of retention spend [8].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [7] Neslin et al. (2006); [8] Verbeke et al. (2012); [12] Pedregosa et al. (2011); <code>docs/problem_decision_matrix.md</code>.</span>
+      <span>Slide 7 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8: LABEL-SHIFT RE-BASING ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag teal">4. PROBLEM FORMULATION &amp; METHODOLOGY</span>
+    <h2 class="action-title">Solving the Case-Control Trap: Re-Basing <span class="accent-coral">49.56% Sample Churn</span> to Realistic <span class="accent-teal">5%–10% Priors</span> [7, 9]</h2>
+  </div>
+
+  <div class="slide-body cols-50-50">
+    <div class="rows-auto">
+      <div class="card white" style="flex:1;">
+        <div class="card-title">Why Unadjusted Sample Precision Overstates Production ROI by 3.3&times; [7, 9]</div>
+        <ul class="clean-list">
+          <li><strong>The Case-Control Calibration Structure:</strong> Company A's dataset has a <strong>49.56% churn rate</strong> (<code>49,562</code> churned vs. <code>50,438</code> stayed) [13]. As documented by Neslin et al. (2006) on the Teradata/Duke wireless benchmark [7] and highlighted in the GCI Tutorial PDF, this is a <strong>50/50 case-control sample</strong> oversampled from a real operator environment where monthly/quarterly churn is <strong>5% to 10%</strong> [3, 7, 8].</li>
+          <li><strong>Ranking Is Invariant, Precision Is Not:</strong> Under prior probability shift (where class-conditional feature distributions P(X | Y) remain invariant), a model's <strong>ROC-AUC is unchanged</strong>, but the fraction of true churners inside the top-k% tier depends directly on the true base rate &pi;<sub>r</sub> [9].</li>
+          <li><strong>Exact Bayes Prior-Shift Formula (Saerens et al., 2002) [9]:</strong> Given sample prior &pi;<sub>s</sub> = 0.4956, sample top-k% precision P<sub>s</sub>, and real production prior &pi;<sub>r</sub> &isin; {0.05, 0.10}:</li>
+        </ul>
+        <div class="formula-box">
+          P<sub>real</sub>(k) &nbsp;=&nbsp; [ P<sub>s</sub>(k) &middot; (&pi;<sub>r</sub> / &pi;<sub>s</sub>) ] &nbsp;/&nbsp; [ P<sub>s</sub>(k) &middot; (&pi;<sub>r</sub> / &pi;<sub>s</sub>) + (1 &minus; P<sub>s</sub>(k)) &middot; ((1 &minus; &pi;<sub>r</sub>) / (1 &minus; &pi;<sub>s</sub>)) ]
+        </div>
+        <p style="font-size:14px; color:#475569; margin-top:4px;">
+          At <strong>Top-10%</strong> (n = 10,000), sample precision P<sub>s</sub> = 81.00% (1.63&times; lift) maps to <strong>P<sub>real</sub> = 32.53% (3.25&times; lift) at &pi;<sub>r</sub> = 10%</strong> and <strong>P<sub>real</sub> = 18.59% (3.72&times; lift) at &pi;<sub>r</sub> = 5%</strong> [9].
+        </p>
+      </div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="card teal-tint" style="flex:1;">
+        <div class="card-title">Side-by-Side Impact of Prior-Shift Correction at Top-10% (n = 10,000) [9]</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric at Top-10% Tier</th>
+              <th class="num">Unadjusted Sample (&pi;<sub>s</sub> = 49.56%)</th>
+              <th class="num">Re-Based Base Case (&pi;<sub>r</sub> = 10.0%)</th>
+              <th class="num">Re-Based Conservative (&pi;<sub>r</sub> = 5.0%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Targeted Subscribers (n)</strong></td>
+              <td class="num">10,000</td>
+              <td class="num">10,000</td>
+              <td class="num">10,000</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>True Precision in Top-10%</strong></td>
+              <td class="num">81.00%</td>
+              <td class="num"><strong>32.53%</strong></td>
+              <td class="num"><strong>18.59%</strong></td>
+            </tr>
+            <tr>
+              <td><strong>True Churners Reached</strong></td>
+              <td class="num">8,100</td>
+              <td class="num"><strong>3,253</strong></td>
+              <td class="num"><strong>1,859</strong></td>
+            </tr>
+            <tr>
+              <td><strong>False Positives Contacted</strong><br><span class="sub-td">(Incur full offer cost c)</span></td>
+              <td class="num">1,900</td>
+              <td class="num">6,747</td>
+              <td class="num">8,141</td>
+            </tr>
+            <tr>
+              <td><strong>Lift Over Random Outreach</strong></td>
+              <td class="num">1.63&times;</td>
+              <td class="num"><strong>3.25&times;</strong></td>
+              <td class="num"><strong>3.72&times;</strong></td>
+            </tr>
+            <tr class="baseline-row">
+              <td><strong>Estimated Net Impact (MU)</strong><br><span class="sub-td">(After paying c on all 10,000)</span></td>
+              <td class="num">+457,708 MU<br><span class="sub-td">(3.3&times; inflated)</span></td>
+              <td class="num"><strong>+138,938 MU</strong><br><span class="sub-td">(Realistic Base)</span></td>
+              <td class="num"><strong>+27,418 MU</strong><br><span class="sub-td">(Realistic Low)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Reporting <strong>prior-shifted precision (32.5% at 10% base rate; 18.6% at 5%)</strong> prevents CFO budget over-commitment while proving the model still delivers a <strong>3.25&times;–3.72&times; concentration of churners</strong> [9].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [7] Neslin et al. (2006); [8] Verbeke et al. (2012); [9] Saerens, Latinne, &amp; Decaestecker (2002), Neural Computation.</span>
+      <span>Slide 8 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 9: MODEL PROGRESSION & R3 TABLE ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag teal">5. MODEL SELECTION &amp; VALIDATION (R3 LIVE-TEXT VERIFIED)</span>
+    <h2 class="action-title">Final Model <span class="accent-teal">M5 (Regularized XGBoost)</span> Reaches <span class="accent-teal">0.7013 CV / 0.7011 Test ROC-AUC</span> &amp; Cuts Overfitting in Half [10, 12]</h2>
+  </div>
+
+  <div class="slide-body rows-auto" style="gap:14px;">
+    <div class="card white" style="padding:14px 18px;">
+      <div class="card-title" style="font-size:17px; margin-bottom:8px;">
+        <span>Systematic 7-Model Progression on 70% Training Split (5-Fold Stratified CV) &amp; Held-Out 30% Test Split (SEED = 42) [10, 11, 12]</span>
+        <span style="font-size:13px; color:#0D9488; font-weight:800;">Selected Model: XGBoost Regularized &amp; Tuned (M5) | Metric: ROC-AUC = 0.7011 (Test) / 0.7013 (CV) | Accuracy = 0.6413</span>
+      </div>
+      <table class="data-table" style="font-size:13.6px;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Model Name &amp; Configuration</th>
+            <th class="num">Features</th>
+            <th class="num">5-Fold CV ROC-AUC</th>
+            <th class="num">Test ROC-AUC</th>
+            <th class="num">Test Accuracy</th>
+            <th class="num">Train Accuracy</th>
+            <th class="num">Train–Test Gap</th>
+            <th class="num">Test Top-10% Precision</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="">
+          <td><strong>M0</strong></td>
+          <td><strong>Dummy Majority Baseline</strong><br><span class="sub-td">Predicts majority class (stayed=0)</span></td>
+          <td class="num">98</td>
+          <td class="num"><strong>0.5000</strong> <span class="sub-td">±0.0000</span></td>
+          <td class="num"><strong>0.5000</strong></td>
+          <td class="num"><strong>0.5044</strong> (50.44%)</td>
+          <td class="num">50.44%</td>
+          <td class="num">0.00 pp</td>
+          <td class="num"><strong>49.6%</strong></td>
+        </tr>
+        <tr class="">
+          <td><strong>M1</strong></td>
+          <td><strong>Logistic Regression (Pipeline)</strong><br><span class="sub-td">Linear baseline (impute + scale + OHE, 107 fair features)</span></td>
+          <td class="num">107</td>
+          <td class="num"><strong>0.6605</strong> <span class="sub-td">±0.0041</span></td>
+          <td class="num"><strong>0.6616</strong></td>
+          <td class="num"><strong>0.6172</strong> (61.72%)</td>
+          <td class="num">61.92%</td>
+          <td class="num">0.21 pp</td>
+          <td class="num"><strong>72.9%</strong></td>
+        </tr>
+        <tr class="">
+          <td><strong>M2</strong></td>
+          <td><strong>Shallow Decision Tree (depth=4)</strong><br><span class="sub-td">Rule-based explanation model (max_depth=4, 107 fair features)</span></td>
+          <td class="num">107</td>
+          <td class="num"><strong>0.6411</strong> <span class="sub-td">±0.0028</span></td>
+          <td class="num"><strong>0.6406</strong></td>
+          <td class="num"><strong>0.5956</strong> (59.56%)</td>
+          <td class="num">59.77%</td>
+          <td class="num">0.21 pp</td>
+          <td class="num"><strong>73.1%</strong></td>
+        </tr>
+        <tr class="baseline-row">
+          <td><strong>M3</strong></td>
+          <td><strong>XGBoost (Tutorial Baseline)</strong> <span class="badge-base">TUTORIAL BASELINE</span><br><span class="sub-td">98 raw features, LabelEncoder, depth=6, lr=0.05, n=300</span></td>
+          <td class="num">98</td>
+          <td class="num"><strong>0.6940</strong> <span class="sub-td">±0.0016</span></td>
+          <td class="num"><strong>0.6938</strong></td>
+          <td class="num"><strong>0.6357</strong> (63.57%)</td>
+          <td class="num">73.49%</td>
+          <td class="num">9.92 pp</td>
+          <td class="num"><strong>79.2%</strong></td>
+        </tr>
+        <tr class="">
+          <td><strong>M4</strong></td>
+          <td><strong>XGBoost + Engineered Features</strong><br><span class="sub-td">107 fair features (20 engineered, -10 dups, no ethnic), depth=6, lr=0.05, n=300</span></td>
+          <td class="num">107</td>
+          <td class="num"><strong>0.7001</strong> <span class="sub-td">±0.0024</span></td>
+          <td class="num"><strong>0.6984</strong></td>
+          <td class="num"><strong>0.6386</strong> (63.86%)</td>
+          <td class="num">74.00%</td>
+          <td class="num">10.14 pp</td>
+          <td class="num"><strong>80.7%</strong></td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>M5</strong></td>
+          <td><strong>XGBoost Regularized &amp; Tuned</strong> <span class="badge-best">FINAL SELECTED</span><br><span class="sub-td">107 fair features, depth=5, lr=0.03, n=550, subsample=0.8, colsample=0.8, min_child_weight=20</span></td>
+          <td class="num">107</td>
+          <td class="num"><strong>0.7013</strong> <span class="sub-td">±0.0018</span></td>
+          <td class="num"><strong>0.7011</strong></td>
+          <td class="num"><strong>0.6413</strong> (64.13%)</td>
+          <td class="num">69.36%</td>
+          <td class="num">5.23 pp</td>
+          <td class="num"><strong>81.0%</strong></td>
+        </tr>
+        <tr class="">
+          <td><strong>M6</strong></td>
+          <td><strong>LightGBM (Gradient Boosted Trees)</strong><br><span class="sub-td">107 fair features, num_leaves=31, lr=0.03, n=500, subsample=0.8</span></td>
+          <td class="num">107</td>
+          <td class="num"><strong>0.7002</strong> <span class="sub-td">±0.0017</span></td>
+          <td class="num"><strong>0.7010</strong></td>
+          <td class="num"><strong>0.6409</strong> (64.09%)</td>
+          <td class="num">71.17%</td>
+          <td class="num">7.07 pp</td>
+          <td class="num"><strong>81.7%</strong></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1.25fr 1fr; gap:20px; flex:1; min-height:0;">
+      <div class="fig-box" style="padding:8px;">
+        <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/model_comparison.png" alt="Model Comparison Chart">
+      </div>
+      <div class="card teal-tint" style="padding:16px 20px;">
+        <div class="card-title" style="font-size:17px;">Why M5 (Regularized XGBoost) Is Selected Over M3 &amp; M6 [10, 11]</div>
+        <ul class="clean-list" style="gap:8px;">
+          <li style="font-size:14.8px;"><strong>Beats Tutorial Baseline (M3) Across Every Metric:</strong> Test ROC-AUC rises from <strong>0.6938 &rarr; 0.7011</strong> (+0.0073), 5-fold CV ROC-AUC rises from <strong>0.6940 &rarr; 0.7013</strong>, Test Accuracy rises from <strong>0.6357 (63.57%) &rarr; 0.6413 (64.13%)</strong>, and Top-10% sample precision jumps from <strong>79.2% &rarr; 81.0%</strong> (+183 more true churners caught per 10,000 targeted).</li>
+          <li style="font-size:14.8px;"><strong>Cuts Overfitting Gap Nearly in Half:</strong> Tutorial M3 (<code>max_depth=6</code>, unregularized) overfits heavily (Train Acc 73.49% vs. Test Acc 63.57% = <strong>9.92 pp gap</strong>). Regularizing M5 (<code>max_depth=5</code>, <code>min_child_weight=20</code>, <code>subsample=0.8</code>, <code>colsample_bytree=0.8</code>, <code>reg_lambda=2.0</code>) shrinks the gap to <strong>5.23 pp</strong> (<code>Brier score = 0.2185</code>).</li>
+          <li style="font-size:14.8px;"><strong>Cross-Checked Against LightGBM (M6):</strong> LightGBM (<code>0.7002</code> CV AUC, <code>0.7010</code> Test AUC, <code>0.6409</code> Test Accuracy) confirms the ~0.701 AUC ceiling on these 107 fair tabular features.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Domain feature engineering (+20 lifecycle/usage features, -10 duplicates, excluding <code>ethnic</code>) plus tree regularization lifts Top-10% precision to <strong>81.0%</strong> while halving overfitting [10, 12].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [10] Chen &amp; Guestrin (2016) XGBoost; [11] Ke et al. (2017) LightGBM; [12] Pedregosa et al. (2011) Scikit-learn (<code>outputs/tables/experiment_log.csv</code>).</span>
+      <span>Slide 9 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10: EXPLAINABILITY & COMMERCIAL LEVERS ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag teal">5. MODEL EXPLAINABILITY &amp; ACTIONABILITY</span>
+    <h2 class="action-title">How the Model Ranks Risk: <span class="accent-coral">Handset Lifecycle</span>, <span class="accent-blue">3-Month Usage Slumps</span> &amp; <span class="accent-teal">Plan Fit</span> Drive Predictions [10, 13]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="fig-box">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/feature_importance_levers.png" alt="Top 10 Features by Gain and Commercial Lever Type">
+      <div class="fig-caption">Figure 6: Top-10 features in Final Model M5 by tree split gain share (%), color-coded by commercial intervenability [10, 13].</div>
+    </div>
+
+    <div class="rows-auto">
+      <div class="fig-box" style="height:260px; padding:6px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 260" width="100%" height="100%" font-family="Inter, DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0F172A"/>
+    </marker>
+  </defs>
+  <rect x="4" y="4" width="872" height="252" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="20" y="28" font-size="14.5" font-weight="700" fill="#0F172A">Plain-Language Intuition: How Gradient-Boosted Trees Score Individual Churn Risk</text>
+  <text x="20" y="46" font-size="11.5" fill="#475569">Instead of relying on a single rigid rule, 550 shallow decision trees sequentially add or subtract risk points based on lifecycle, usage, and care signals.</text>
+
+  <!-- Tree 1: Lifecycle & Handset -->
+  <rect x="20" y="62" width="205" height="176" rx="8" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+  <rect x="20" y="62" width="205" height="28" rx="8" fill="#E11D48"/>
+  <text x="122" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group A: Device &amp; Tenure</text>
+  <text x="122" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Handset Age &gt; 300 Days?</text>
+  <line x1="85" y1="114" x2="62" y2="136" stroke="#64748B" stroke-width="1.5"/>
+  <line x1="155" y1="114" x2="178" y2="136" stroke="#E11D48" stroke-width="1.8"/>
+  <rect x="28" y="138" width="68" height="34" rx="5" fill="#F1F5F9"/>
+  <text x="62" y="153" text-anchor="middle" font-size="10" fill="#334155">No (≤300d)</text>
+  <text x="62" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#0D9488">-0.14 risk</text>
+  <rect x="132" y="138" width="84" height="34" rx="5" fill="#FFE4E6"/>
+  <text x="174" y="153" text-anchor="middle" font-size="10" fill="#881337">Yes (&gt;300d)</text>
+  <text x="174" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#E11D48">+0.21 risk</text>
+  <text x="32" y="196" font-size="10.2" fill="#334155">• Also checks Months 10–12 cliff</text>
+  <text x="32" y="212" font-size="10.2" fill="#334155">• Also checks Refurbished phone</text>
+  <text x="32" y="228" font-size="10.2" font-weight="700" fill="#E11D48">→ Direct Upgrade / Renewal Lever</text>
+
+  <text x="239" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#0F172A">+</text>
+
+  <!-- Tree 2: Usage Trajectory -->
+  <rect x="254" y="62" width="205" height="176" rx="8" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.8"/>
+  <rect x="254" y="62" width="205" height="28" rx="8" fill="#1D4ED8"/>
+  <text x="356" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group B: Usage Slump</text>
+  <text x="356" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Minutes Dropping vs 3m Avg?</text>
+  <line x1="319" y1="114" x2="296" y2="136" stroke="#64748B" stroke-width="1.5"/>
+  <line x1="389" y1="114" x2="412" y2="136" stroke="#1D4ED8" stroke-width="1.8"/>
+  <rect x="262" y="138" width="68" height="34" rx="5" fill="#F1F5F9"/>
+  <text x="296" y="153" text-anchor="middle" font-size="10" fill="#334155">Stable/Up</text>
+  <text x="296" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#0D9488">-0.08 risk</text>
+  <rect x="366" y="138" width="84" height="34" rx="5" fill="#DBEAFE"/>
+  <text x="408" y="153" text-anchor="middle" font-size="10" fill="#1E3A8A">Slump &gt;30%</text>
+  <text x="408" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#1D4ED8">+0.16 risk</text>
+  <text x="266" y="196" font-size="10.2" fill="#334155">• Checks change_mou &amp; ratio_3m</text>
+  <text x="266" y="212" font-size="10.2" fill="#334155">• Flags zero-MOU dormant SIMs</text>
+  <text x="266" y="228" font-size="10.2" font-weight="700" fill="#1D4ED8">→ Early-Warning Rescue Trigger</text>
+
+  <text x="473" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#0F172A">+</text>
+
+  <!-- Tree 3: Billing & Care Friction -->
+  <rect x="488" y="62" width="185" height="176" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1.8"/>
+  <rect x="488" y="62" width="185" height="28" rx="8" fill="#D97706"/>
+  <text x="580" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group C: Plan Fit</text>
+  <text x="580" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Overage &amp; Care Calls?</text>
+  <rect x="500" y="122" width="160" height="50" rx="5" fill="#FEF3C7"/>
+  <text x="580" y="140" text-anchor="middle" font-size="10" fill="#92400E">High overage share +</text>
+  <text x="580" y="154" text-anchor="middle" font-size="10" fill="#92400E">no spending limit (ASL=N)</text>
+  <text x="580" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#D97706">+0.09 risk</text>
+  <text x="500" y="196" font-size="10.2" fill="#334155">• Checks totmrc &amp; ovrrev</text>
+  <text x="500" y="212" font-size="10.2" fill="#334155">• Checks custcare_Mean</text>
+  <text x="500" y="228" font-size="10.2" font-weight="700" fill="#D97706">→ Plan Right-Sizing Lever</text>
+
+  <line x1="675" y1="150" x2="700" y2="150" stroke="#0F172A" stroke-width="2.2" marker-end="url(#arr)"/>
+
+  <!-- Output Ranking Box -->
+  <rect x="704" y="62" width="156" height="176" rx="8" fill="#0F172A"/>
+  <text x="782" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#38BDF8">Calibrated Score p̂_i</text>
+  <rect x="716" y="102" width="132" height="36" rx="5" fill="#E11D48"/>
+  <text x="782" y="118" text-anchor="middle" font-size="10.5" font-weight="700" fill="#FFFFFF">Top 10% Risk Tier</text>
+  <text x="782" y="132" text-anchor="middle" font-size="10" fill="#FFE4E6">81.0% Sample Churn</text>
+  <rect x="716" y="146" width="132" height="34" rx="5" fill="#334155"/>
+  <text x="782" y="161" text-anchor="middle" font-size="10" font-weight="700" fill="#F8FAFC">Middle 80% Tier</text>
+  <text x="782" y="174" text-anchor="middle" font-size="9.5" fill="#CBD5E1">Monitor digitally</text>
+  <rect x="716" y="188" width="132" height="36" rx="5" fill="#0D9488"/>
+  <text x="782" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#FFFFFF">Bottom 10% Safe</text>
+  <text x="782" y="218" text-anchor="middle" font-size="10" fill="#CCFBF1">18.4% Sample Churn</text>
+</svg>
+      </div>
+
+      <div class="card white" style="flex:1; padding:14px 18px;">
+        <div class="card-title" style="font-size:16.5px; margin-bottom:6px;">Triangulating Gain, Held-Out Permutation Importance &amp; Ablation [10, 12]</div>
+        <table class="data-table" style="font-size:13.2px;">
+          <thead>
+            <tr>
+              <th>Signal Family</th>
+              <th>Top Features (Gain Share / Perm Drop)</th>
+              <th>PDP / Ablation Finding</th>
+              <th>Mapped Retention Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Handset Lifecycle</strong></td>
+              <td><code>dev_age_gt_300</code> (15.2% gain), <code>eqpdays</code> (4.6% gain, #3 perm), <code>refurb_new</code> (2.6%)</td>
+              <td>PDP jumps from <strong>0.458 (300d) &rarr; 0.549 (315d)</strong>; dropping all <code>eqpdays</code> cols cuts AUC by <strong>-0.0065</strong>.</td>
+              <td><strong>Lane 2:</strong> Pre-300d trade-in voucher + quality warranty on refurb replacements.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Tenure Renewal Window</strong></td>
+              <td><code>months</code> (2.6% gain, #2 perm +0.0214), <code>tenure_le_9</code> (2.2%), <code>tenure_10_12_cliff</code> (1.9%)</td>
+              <td>PDP peaks at <strong>0.609 at Month 12</strong> before decaying to 0.475 by Month 24.</td>
+              <td><strong>Lane 2:</strong> Proactive Month 8–9 renewal check before Month 11 peak.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Usage Slump &amp; Plan Fit</strong></td>
+              <td><code>mou_ratio_3m</code> (#1 perm +0.0304, 2.3% gain), <code>asl_flag</code> (1.4%), <code>recurring_rev_share</code> (1.4%)</td>
+              <td>Users with <code>mou_Mean / avg3mou &lt; 0.7</code> and high overage share spike in risk while still active.</td>
+              <td><strong>Lane 1:</strong> Right-sized bundle + Account Spending Limit (<code>asl_flag</code>) activation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> A non-technical CRM manager can read every top model driver as a concrete action: <strong>refresh aging handsets before Day 300</strong> and <strong>right-size plans when 3-month usage drops</strong> [10, 13].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [10] Chen &amp; Guestrin (2016); [12] Pedregosa et al. (2011) (<code>outputs/tables/feature_importance_gain.csv</code>, <code>feature_importance_permutation.csv</code>).</span>
+      <span>Slide 10 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 11: TOP-K TARGETING & LIFT ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag teal">5. MODEL EVALUATION — DECILES &amp; LIFT</span>
+    <h2 class="action-title">Top-10% Targeting Concentrates Churners by <span class="accent-teal">3.25&times; (10% Prior)</span> to <span class="accent-teal">3.72&times; (5% Prior)</span> Over Random [8, 9]</h2>
+  </div>
+
+  <div class="slide-body rows-auto" style="gap:14px;">
+    <div class="fig-box" style="height:370px; padding:8px;">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/topk_lift_curve.png" alt="Top-k Precision and Lift Curve">
+    </div>
+
+    <div class="card white" style="flex:1; padding:12px 18px;">
+      <div class="card-title" style="font-size:16.5px; margin-bottom:6px;">
+        <span>Held-Out Test Set Top-k% Targeting Table (Scaled to N = 100,000 Base; Sample vs. Label-Shift Re-Based) [8, 9]</span>
+        <span style="font-size:13px; color:#E11D48; font-weight:800;">Top-10% Risk (81.0% Sample Churn) vs. Bottom-10% Safe Tier (18.4% Sample Churn) = 4.40&times; Risk Separation</span>
+      </div>
+      <table class="data-table" style="font-size:13.5px;">
+        <thead>
+          <tr>
+            <th>Targeting Tier (k%)</th>
+            <th class="num">Targeted Customers (per 100k)</th>
+            <th class="num">Score Cutoff (p&#770;<sub>i</sub>)</th>
+            <th class="num">Sample Precision (&pi;<sub>s</sub>=49.6%)</th>
+            <th class="num">Sample Recall (Share Caught)</th>
+            <th class="num">Sample Lift</th>
+            <th class="num">Re-Based Precision (&pi;<sub>r</sub>=10% Prior)</th>
+            <th class="num">Re-Based Precision (&pi;<sub>r</sub>=5% Prior)</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="">
+          <td><strong>Top 1%</strong></td>
+          <td class="num">1,000</td>
+          <td class="num">&ge; 0.892</td>
+          <td class="num"><strong>93.7%</strong></td>
+          <td class="num">1.9%</td>
+          <td class="num">1.89&times;</td>
+          <td class="num"><strong>62.6%</strong> (6.26&times;)</td>
+          <td class="num"><strong>44.2%</strong> (8.84&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 2%</strong></td>
+          <td class="num">2,000</td>
+          <td class="num">&ge; 0.866</td>
+          <td class="num"><strong>91.2%</strong></td>
+          <td class="num">3.7%</td>
+          <td class="num">1.84&times;</td>
+          <td class="num"><strong>53.8%</strong> (5.38&times;)</td>
+          <td class="num"><strong>35.6%</strong> (7.12&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 5%</strong></td>
+          <td class="num">5,000</td>
+          <td class="num">&ge; 0.792</td>
+          <td class="num"><strong>86.7%</strong></td>
+          <td class="num">8.7%</td>
+          <td class="num">1.75&times;</td>
+          <td class="num"><strong>42.4%</strong> (4.24&times;)</td>
+          <td class="num"><strong>25.8%</strong> (5.17&times;)</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>Top 10%</strong> <span class="badge-best">PILOT CUTOFF</span></td>
+          <td class="num">10,000</td>
+          <td class="num">&ge; 0.713</td>
+          <td class="num"><strong>81.0%</strong></td>
+          <td class="num">16.3%</td>
+          <td class="num">1.63&times;</td>
+          <td class="num"><strong>32.5%</strong> (3.25&times;)</td>
+          <td class="num"><strong>18.6%</strong> (3.72&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 15%</strong></td>
+          <td class="num">15,000</td>
+          <td class="num">&ge; 0.667</td>
+          <td class="num"><strong>77.0%</strong></td>
+          <td class="num">23.3%</td>
+          <td class="num">1.55&times;</td>
+          <td class="num"><strong>27.5%</strong> (2.75&times;)</td>
+          <td class="num"><strong>15.2%</strong> (3.04&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 20%</strong></td>
+          <td class="num">20,000</td>
+          <td class="num">&ge; 0.635</td>
+          <td class="num"><strong>74.5%</strong></td>
+          <td class="num">30.1%</td>
+          <td class="num">1.50&times;</td>
+          <td class="num"><strong>24.9%</strong> (2.48&times;)</td>
+          <td class="num"><strong>13.5%</strong> (2.71&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 30%</strong></td>
+          <td class="num">30,000</td>
+          <td class="num">&ge; 0.584</td>
+          <td class="num"><strong>70.3%</strong></td>
+          <td class="num">42.5%</td>
+          <td class="num">1.42&times;</td>
+          <td class="num"><strong>21.1%</strong> (2.11&times;)</td>
+          <td class="num"><strong>11.2%</strong> (2.25&times;)</td>
+        </tr>
+        <tr class="">
+          <td><strong>Top 50%</strong></td>
+          <td class="num">50,000</td>
+          <td class="num">&ge; 0.497</td>
+          <td class="num"><strong>63.7%</strong></td>
+          <td class="num">64.2%</td>
+          <td class="num">1.28&times;</td>
+          <td class="num"><strong>16.5%</strong> (1.65&times;)</td>
+          <td class="num"><strong>8.6%</strong> (1.72&times;)</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Selecting the <strong>Top-10% cutoff (p&#770;<sub>i</sub> &ge; 0.713, n = 10,000)</strong> captures <strong>3,253 true churners</strong> under a 10% real base rate (vs. 1,000 by random outreach)—maximizing campaign efficiency [8, 9].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [8] Verbeke et al. (2012); [9] Saerens et al. (2002) (<code>outputs/tables/topk_targeting.csv</code>).</span>
+      <span>Slide 11 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 12: TWO-LANE RETENTION PROGRAM ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag amber">6. PROPOSED OPERATIONAL SOLUTION</span>
+    <h2 class="action-title">Operational Playbook: A <span class="accent-blue">Two-Lane Retention Program</span> Gated by a 90-Day 80/20 Holdout Pilot [7, 8]</h2>
+  </div>
+
+  <div class="slide-body rows-auto" style="gap:14px;">
+    <div class="fig-box" style="height:315px; padding:6px 12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" width="100%" height="100%" font-family="Inter, DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#1D4ED8"/>
+    </marker>
+    <marker id="arr-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0D9488"/>
+    </marker>
+  </defs>
+  <rect x="4" y="4" width="912" height="292" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="20" y="28" font-size="15" font-weight="700" fill="#0F172A">Operational Architecture: Monthly Scoring, Two-Lane Offer Routing &amp; 80/20 Holdout Pilot</text>
+
+  <!-- Left Box: Monthly Batch Scoring -->
+  <rect x="18" y="48" width="192" height="228" rx="8" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.8"/>
+  <rect x="18" y="48" width="192" height="30" rx="8" fill="#0F172A"/>
+  <text x="114" y="68" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">1. Monthly Batch Scoring</text>
+  <text x="28" y="96" font-size="10.8" font-weight="700" fill="#0F172A">• Input Base: N = 100,000</text>
+  <text x="28" y="114" font-size="10.2" fill="#334155">  Compute 107 fair features</text>
+  <text x="28" y="134" font-size="10.8" font-weight="700" fill="#0F172A">• Score &amp; Filter Top-10%</text>
+  <text x="28" y="152" font-size="10.2" fill="#334155">  n = 10,000 highest-risk accts</text>
+  <text x="28" y="172" font-size="10.8" font-weight="700" fill="#E11D48">• Value Guardrail Filter</text>
+  <text x="28" y="190" font-size="10.2" fill="#334155">  Exclude dormant zero-MOU</text>
+  <text x="28" y="205" font-size="10.2" fill="#334155">  accounts (ARPU 23.11 MU)</text>
+  <text x="28" y="220" font-size="10.2" fill="#334155">  from costly human outreach;</text>
+  <text x="28" y="235" font-size="10.2" fill="#334155">  route to automated SMS only</text>
+
+  <line x1="210" y1="115" x2="238" y2="115" stroke="#1D4ED8" stroke-width="2.2" marker-end="url(#arr-b)"/>
+  <line x1="210" y1="215" x2="238" y2="215" stroke="#0D9488" stroke-width="2.2" marker-end="url(#arr-t)"/>
+
+  <!-- Middle Upper: Lane 1 -->
+  <rect x="242" y="48" width="402" height="106" rx="8" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="242" y="48" width="402" height="28" rx="8" fill="#1D4ED8"/>
+  <text x="443" y="66" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">Lane 1: High-Value Usage-Slump &amp; Plan-Fit Rescue</text>
+  <text x="252" y="92" font-size="10.2" font-weight="700" fill="#0F172A">Target Trigger:</text>
+  <text x="336" y="92" font-size="9.8" fill="#334155">Top-10% risk + rev_Mean ≥ 30 MU + dropping MOU / overage</text>
+  <text x="252" y="112" font-size="10.2" font-weight="700" fill="#0F172A">Action / Offer:</text>
+  <text x="336" y="112" font-size="9.8" fill="#334155">Proactive care call + right-sized bundle / overage waiver + ASL</text>
+  <text x="252" y="132" font-size="10.2" font-weight="700" fill="#1D4ED8">Unit Economics:</text>
+  <text x="336" y="132" font-size="9.8" font-weight="700" fill="#0F172A">Cost c = 7.50 MU | Protected Value V = 328.83 MU (8m horizon)</text>
+
+  <!-- Middle Lower: Lane 2 -->
+  <rect x="242" y="170" width="402" height="106" rx="8" fill="#FFFFFF" stroke="#0D9488" stroke-width="2"/>
+  <rect x="242" y="170" width="402" height="28" rx="8" fill="#0D9488"/>
+  <text x="443" y="188" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">Lane 2: Pre-300-Day Handset Refresh &amp; Month 8–9 Check</text>
+  <text x="252" y="214" font-size="10.2" font-weight="700" fill="#0F172A">Target Trigger:</text>
+  <text x="336" y="214" font-size="9.8" fill="#334155">eqpdays in [240, 300] days (or Month 8–9) + rev_Mean ≥ 30 MU</text>
+  <text x="252" y="234" font-size="10.2" font-weight="700" fill="#0F172A">Action / Offer:</text>
+  <text x="336" y="234" font-size="9.8" fill="#334155">Installment handset trade-in voucher + 12m loyalty bonus</text>
+  <text x="252" y="254" font-size="10.2" font-weight="700" fill="#0D9488">Cohort Size:</text>
+  <text x="336" y="254" font-size="9.8" font-weight="700" fill="#0F172A">8,815 eligible accts in 100k (ARPU = 66.91 MU; c = 4.00 MU)</text>
+
+  <line x1="644" y1="101" x2="670" y2="140" stroke="#1D4ED8" stroke-width="2" marker-end="url(#arr-b)"/>
+  <line x1="644" y1="223" x2="670" y2="180" stroke="#0D9488" stroke-width="2" marker-end="url(#arr-t)"/>
+
+  <!-- Right Box: 90-Day Randomized Holdout Pilot -->
+  <rect x="674" y="48" width="226" height="228" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+  <rect x="674" y="48" width="226" height="30" rx="8" fill="#D97706"/>
+  <text x="787" y="68" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">3. 90-Day A/B Holdout Gate</text>
+  <rect x="688" y="88" width="198" height="44" rx="6" fill="#FFFFFF" stroke="#0D9488" stroke-width="1.5"/>
+  <text x="787" y="106" text-anchor="middle" font-size="10.8" font-weight="700" fill="#0D9488">80% Treatment Group</text>
+  <text x="787" y="122" text-anchor="middle" font-size="9.8" fill="#334155">Receives Lane 1 / Lane 2 offer</text>
+  <rect x="688" y="140" width="198" height="44" rx="6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+  <text x="787" y="158" text-anchor="middle" font-size="10.8" font-weight="700" fill="#475569">20% Randomized Control</text>
+  <text x="787" y="174" text-anchor="middle" font-size="9.8" fill="#334155">Standard BAU experience</text>
+  <text x="688" y="204" font-size="10.8" font-weight="700" fill="#92400E">Scale-Up Gate Criteria:</text>
+  <text x="688" y="222" font-size="10.0" fill="#334155">• Verified uplift s ≥ 7.0% (break-even)</text>
+  <text x="688" y="238" font-size="10.0" fill="#334155">• Target Base Case s ≥ 15%–20%</text>
+  <text x="688" y="254" font-size="10.0" fill="#334155">• Positive net margin after offer cost</text>
+</svg>
+    </div>
+
+    <div class="slide-body cols-3" style="gap:18px;">
+      <div class="card blue-tint">
+        <div class="card-title" style="font-size:17px; color:#1E3A8A;">Lane 1: High-Value Usage-Slump &amp; Plan-Fit Rescue</div>
+        <ul class="clean-list" style="gap:7px;">
+          <li style="font-size:14.2px;"><strong>Target Segment:</strong> Top-10% risk score (<code>p̂_i ≥ 0.713</code>) with active revenue (<code>rev_Mean ≥ 30 MU</code>, <code>mou_Mean > 0</code>) exhibiting a 3-month usage drop (<code>mou_ratio_3m < 0.75</code>) or overage friction (<code>ovrrev_Mean > 10 MU</code>).</li>
+          <li style="font-size:14.2px;"><strong>Commercial Offer:</strong> Proactive care call + right-sized voice/data bundle, one-time overage buffer credit, and Account Spending Limit (<code>asl_flag = Y</code>) activation.</li>
+          <li style="font-size:14.2px;"><strong>Unit Economics:</strong> Expected cost <strong>c = 7.50 MU</strong> per targeted account; protects <strong>V = 328.83 MU</strong> (8m margin at 58.72 MU ARPU). Break-even save rate is just <strong>s* = 7.01%</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card teal-tint">
+        <div class="card-title" style="font-size:17px; color:#0F766E;">Lane 2: Pre-300-Day Handset Refresh &amp; Month 8–9 Check</div>
+        <ul class="clean-list" style="gap:7px;">
+          <li style="font-size:14.2px;"><strong>Target Segment:</strong> Active subscribers in the <strong>240–300 day handset window</strong> (or Tenure Months 8–9) with <code>rev_Mean ≥ 30 MU</code> (<strong>8,815 accounts</strong> in 100k; mean ARPU = <strong>66.91 MU</strong>, V = 374.70 MU).</li>
+          <li style="font-size:14.2px;"><strong>Commercial Offer:</strong> Early handset trade-in / 12-month installment upgrade voucher + quality check for refurbished-device holders (<code>refurb_new == 'R'</code>).</li>
+          <li style="font-size:14.2px;"><strong>90-Day Pilot Math:</strong> 80% treatment (<code>7,052</code> accts) vs. 20% control (<code>1,763</code> accts) at <strong>c = 4.00 MU</strong>; closing 25% of the 5.5 pp re-based jump saves <strong>97.0 accounts</strong> = <strong>+8,125 MU net pilot return</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card amber-tint">
+        <div class="card-title" style="font-size:17px; color:#92400E;">Guardrail Lane: Automated Digital Triage for Dormant SIMs</div>
+        <ul class="clean-list" style="gap:7px;">
+          <li style="font-size:14.2px;"><strong>Target Segment:</strong> High-risk accounts with <code>mou_Mean ≤ 10</code> or <code>rev_Mean < 30 MU</code> (including the 1,615 zero-MOU accounts with 79.81% churn and 23.11 MU ARPU).</li>
+          <li style="font-size:14.2px;"><strong>Why Exclude From Human Calls:</strong> At 23.11 MU ARPU, human call + subsidy outreach has poor unit economics because disengagement has already occurred.</li>
+          <li style="font-size:14.2px;"><strong>Automated Action:</strong> Zero-marginal-cost automated SMS/push "Win-Back Top-Up Bonus" (<code>c < 0.25 MU</code>) triggered only upon an inbound recharge or usage event.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Routing high-risk subscribers into <strong>cause-specific lanes</strong> and keeping a <strong>mandatory 20% randomized holdout</strong> turns predictive scores into verifiable profit [7, 8].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [7] Neslin et al. (2006); [8] Verbeke et al. (2012); [13] Company A Dataset (<code>docs/assumptions.md</code>).</span>
+      <span>Slide 12 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 13: FINANCIAL IMPACT & SENSITIVITY ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag amber">6. ESTIMATED FINANCIAL IMPACT &amp; SENSITIVITY</span>
+    <h2 class="action-title">Re-Based Net Impact at Top-10%: <span class="accent-blue">+27,418 MU (Conservative)</span> to <span class="accent-teal">+138,938 MU (Base)</span> to <span class="accent-coral">+329,786 MU (Optimistic)</span> [8, 9]</h2>
+  </div>
+
+  <div class="slide-body rows-auto" style="gap:14px;">
+    <div class="fig-box" style="height:365px; padding:8px;">
+      <img src="/home/islam-raad/Projects/Final Assignment/outputs/figures/impact_scenarios_tornado.png" alt="Net Financial Impact Scenarios and Sensitivity Tornado">
+    </div>
+
+    <div class="card white" style="flex:1; padding:12px 18px;">
+      <div class="card-title" style="font-size:16px; margin-bottom:6px;">
+        <span>Explicit Scenario &amp; Assumption Table at Pilot Cutoff k = 10% (n = 10,000 Targeted out of N = 100,000; Dataset Monetary Units, MU) [8, 9, 13]</span>
+        <span style="font-size:12.5px; color:#0F766E; font-weight:800;">Net Impact = n &middot; p_adj &middot; s &middot; (ARPU &middot; margin &middot; H) &minus; n &middot; c</span>
+      </div>
+      <table class="data-table" style="font-size:13.3px;">
+        <thead>
+          <tr>
+            <th>Scenario Name</th>
+            <th class="num">Real Churn Prior (&pi;<sub>r</sub>)</th>
+            <th class="num">Re-Based Precision (p<sub>adj</sub>)</th>
+            <th class="num">Save Rate (s)</th>
+            <th class="num">ARPU &times; Margin &times; H = V</th>
+            <th class="num">Offer Cost (c)</th>
+            <th class="num">Saved Accts</th>
+            <th class="num">Gross Saved (MU)</th>
+            <th class="num">Total Cost (MU)</th>
+            <th class="num">Estimated Net Impact (MU)</th>
+            <th class="num">ROI / Break-Even s*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Conservative</strong> <span class="sub-td">(5% Prior, Median ARPU)</span></td>
+            <td class="num">5.0%</td>
+            <td class="num">18.59%</td>
+            <td class="num">15.0%</td>
+            <td class="num">48.20 &times; 65% &times; 6m = <strong>187.98 MU</strong></td>
+            <td class="num">2.50 MU</td>
+            <td class="num">278.8</td>
+            <td class="num">52,418 MU</td>
+            <td class="num">25,000 MU</td>
+            <td class="num"><strong>+27,418 MU</strong></td>
+            <td class="num">+109.7% / s*=7.15%</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Base Case (Recommended)</strong> <span class="sub-td">(10% Prior, Mean ARPU)</span></td>
+            <td class="num"><strong>10.0%</strong></td>
+            <td class="num"><strong>32.53%</strong></td>
+            <td class="num"><strong>20.0%</strong></td>
+            <td class="num">58.72 &times; 70% &times; 8m = <strong>328.83 MU</strong></td>
+            <td class="num"><strong>7.50 MU</strong></td>
+            <td class="num"><strong>650.6</strong></td>
+            <td class="num"><strong>213,938 MU</strong></td>
+            <td class="num"><strong>75,000 MU</strong></td>
+            <td class="num"><strong>+138,938 MU</strong></td>
+            <td class="num"><strong>+185.3% / s*=7.01%</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Optimistic</strong> <span class="sub-td">(10% Prior, 12m Full Renewal)</span></td>
+            <td class="num">10.0%</td>
+            <td class="num">32.53%</td>
+            <td class="num">25.0%</td>
+            <td class="num">58.72 &times; 75% &times; 12m = <strong>528.48 MU</strong></td>
+            <td class="num">10.00 MU</td>
+            <td class="num">813.2</td>
+            <td class="num">429,786 MU</td>
+            <td class="num">100,000 MU</td>
+            <td class="num"><strong>+329,786 MU</strong></td>
+            <td class="num">+329.8% / s*=5.82%</td>
+          </tr>
+          <tr class="baseline-row">
+            <td><em>Unadjusted Sample Reference</em> <span class="sub-td">(If 49.56% Prior Ignored)</span></td>
+            <td class="num"><em>49.56%</em></td>
+            <td class="num"><em>81.00%</em></td>
+            <td class="num"><em>20.0%</em></td>
+            <td class="num"><em>58.72 &times; 70% &times; 8m = 328.83 MU</em></td>
+            <td class="num"><em>7.50 MU</em></td>
+            <td class="num"><em>1,620.0</em></td>
+            <td class="num"><em>532,708 MU</em></td>
+            <td class="num"><em>75,000 MU</em></td>
+            <td class="num"><em>+457,708 MU (3.3&times; inflated)</em></td>
+            <td class="num"><em>+610.3% / s*=2.82%</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Even under the <strong>Conservative 5% real-churn prior (+27,418 MU net)</strong> and downside tornado stress tests, the Top-10% program remains solidly profitable because break-even conversion is only <strong>7.01%–7.15%</strong> [8, 9].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [6] Reichheld &amp; Sasser (1990); [8] Verbeke et al. (2012); [9] Saerens et al. (2002) (<code>outputs/tables/sensitivity_tornado.csv</code>, <code>docs/assumptions.md</code>).</span>
+      <span>Slide 13 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 14: RISKS, LIMITATIONS & 90-DAY ROADMAP ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag amber">7. GOVERNANCE, RISKS &amp; EXECUTION ROADMAP</span>
+    <h2 class="action-title">Five Operational Risk Mitigations &amp; a <span class="accent-teal">90-Day Gated Pilot Roadmap</span> Before Full Scale-Up [8, 9]</h2>
+  </div>
+
+  <div class="slide-body cols-55-45">
+    <div class="card white">
+      <div class="card-title">Key Technical &amp; Commercial Risks Paired with Concrete Mitigations [8, 9, 13]</div>
+      <table class="data-table" style="font-size:13.8px;">
+        <thead>
+          <tr>
+            <th>Risk / Limitation</th>
+            <th>Why It Matters</th>
+            <th>Concrete Mitigation Built Into PoC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Observational vs. Causal Uplift</strong></td>
+            <td>High churn risk p&#770;<sub>i</sub> does not guarantee a customer will accept an offer (<em>persuadables</em> vs. <em>sure losses</em>).</td>
+            <td>Enforce a <strong>20% randomized holdout control group</strong> in Phase 2 to measure true incremental save rate <em>s</em> before scaling budget.</td>
+          </tr>
+          <tr>
+            <td><strong>2. Case-Control Prior Drift</strong></td>
+            <td>Model probabilities are calibrated to the 49.56% sample prior rather than live monthly churn (5%–10%).</td>
+            <td>Apply <strong>Saerens et al. [9] prior-shift adjustment</strong> in batch scoring and monitor monthly Brier/decile calibration.</td>
+          </tr>
+          <tr>
+            <td><strong>3. "Sleeping Dog" Trigger Risk</strong></td>
+            <td>Contacting satisfied month-to-month customers about contract renewal can accidentally prompt shopping.</td>
+            <td>Restrict proactive calls to <strong>Top-10% risk (<code>p̂_i ≥ 0.713</code>)</strong>; track weekly treatment-vs-control churn delta by segment.</td>
+          </tr>
+          <tr>
+            <td><strong>4. Subsidy Cannibalization</strong></td>
+            <td>Low-risk or low-ARPU subscribers may game handset trade-in vouchers.</td>
+            <td>Enforce <strong><code>rev_Mean ≥ 30 MU</code> floor</strong>, <code>mou_Mean > 0</code>, and 12-month installment credit vesting (no upfront cash).</td>
+          </tr>
+          <tr>
+            <td><strong>5. Demographic Proxy Bias</strong></td>
+            <td>Neighborhood/credit codes (<code>prizm_social_one</code>, <code>crclscod</code>) could correlate with protected groups.</td>
+            <td><strong><code>ethnic</code> is excluded</strong> (<code>-0.0016</code> AUC impact); audit offer eligibility parity across regions every 30 days.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rows-auto">
+      <div class="card navy" style="flex:1;">
+        <div class="card-title">90-Day Phased Implementation &amp; Governance Roadmap</div>
+        <ul class="clean-list" style="gap:14px;">
+          <li>
+            <strong>Phase 1 — Days 1 to 30: Shadow Scoring &amp; Pipeline Integration</strong><br>
+            Deploy <code>src/features.py</code> (107 fair features) + <code>final_model.joblib</code> (M5) in monthly shadow mode on billing warehouse; validate data drift, missingness flags (<code>change_mou</code>, <code>hnd_webcap</code>), and CRM call-queue routing.
+          </li>
+          <li>
+            <strong>Phase 2 — Days 31 to 60: Launch 80/20 Randomized Holdout Pilot</strong><br>
+            Execute <strong>Lane 1</strong> (Top-10% usage-slump rescue: 8,000 treatment / 2,000 control) and <strong>Lane 2</strong> (<code>eqpdays</code> 240–300d refresh: 7,052 treatment / 1,763 control). Track acceptance rate, call handling time, and 30/60-day survival.
+          </li>
+          <li>
+            <strong>Phase 3 — Days 61 to 90: Uplift Readout, Uplift Model &amp; Scale Gate</strong><br>
+            Compare 90-day churn between 80% Treatment and 20% Control. <strong>Hard Scale Gate:</strong> Proceed to full base rollout if verified save rate exceeds break-even (<strong>s &ge; 7.01%</strong> in Lane 1; net positive MU in Lane 2), then train a two-model uplift ranker on pilot outcomes.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>So What / Decision Implication:</strong> Leadership does not need to gamble on unproven assumptions—a <strong>90-day 80/20 pilot</strong> validates whether conversion exceeds the <strong>7.01% break-even threshold</strong> before full commitment [8].
+    </div>
+    <div class="meta-bar">
+      <span>Sources: [8] Verbeke et al. (2012); [9] Saerens et al. (2002); <code>docs/problem_definition.md</code>, <code>docs/assumptions.md</code>.</span>
+      <span>Slide 14 / 15</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 15: REFERENCES ==================== -->
+<section class="slide">
+  <div class="slide-header">
+    <span class="section-tag">8. VERIFIED REFERENCES &amp; AI DISCLOSURE</span>
+    <h2 class="action-title">Complete Numbered References &amp; Mandatory Tool Disclosure (100% Matched to <code>references.txt</code>)</h2>
+  </div>
+
+  <div class="slide-body rows-auto">
+    <div class="card white" style="flex:1; padding:18px 24px;">
+      <div class="card-title" style="font-size:17px; margin-bottom:8px;">
+        <span>All External Market Reports, Peer-Reviewed Papers, Software Libraries, Dataset &amp; AI Assistance Links [1]–[14]</span>
+        <span style="font-size:12.5px; color:#1D4ED8;">Synchronized with <code>submission/references.txt</code></span>
+      </div>
+      <div class="ref-grid">
+        <div class="ref-item">[1] DataReportal (Kemp, S.). (2025). Digital 2025: Iraq &amp; Digital 2024: Iraq — Global Digital Insights (46.0M–48.1M cellular mobile connections; 100%–103% population penetration). https://datareportal.com/reports/digital-2025-iraq</div>
+<div class="ref-item">[2] World Bank &amp; International Telecommunication Union (ITU). (2024). World Development Indicators: Mobile cellular subscriptions (per 100 people) — Iraq (IT.CEL.SETS.P2: 100.08 per 100 people). https://data.worldbank.org/indicator/IT.CEL.SETS.P2?locations=IQ</div>
+<div class="ref-item">[3] GSMA Intelligence. (2024). The Mobile Economy Middle East and North Africa 2024 (427M unique MENA subscribers; 64% penetration; prepaid dominance). https://www.gsma.com/solutions-and-impact/connectivity-for-good/mobile-economy/mena/</div>
+<div class="ref-item">[4] Zain Group. (2024). Zain Group Annual Report 2023 &amp; 2024 Operations Review — Zain Iraq (17.9M–19.3M active subscribers; USD 0.97B–1.1B revenue). https://www.zain.com/en/investor-relations/financial-reports</div>
+<div class="ref-item">[5] Ooredoo Group. (2024). Ooredoo Group Annual Report 2023 &amp; 2024 — Asiacell Iraq Operations (17.69M–19.13M subscribers; QAR 4,452M revenue; 24.8 QAR blended ARPU). https://www.ooredoo.com/en/investors/financial-information/annual-reports/</div>
+<div class="ref-item">[6] Reichheld, F. F., &amp; Sasser, W. E., Jr. (1990). Zero Defections: Quality Comes to Services. Harvard Business Review, 68(5), 105–111 (5% defection reduction yields 25%–85% profit lift). https://hbr.org/1990/09/zero-defections-quality-comes-to-services</div>
+<div class="ref-item">[7] Neslin, S. A., Gupta, S., Kamakura, W., Lu, J., &amp; Mason, C. H. (2006). Defection Detection: Measuring and Understanding the Predictive Accuracy of Customer Churn Models. Journal of Marketing Research, 43(2), 204–211. https://doi.org/10.1509/jmkr.43.2.204</div>
+<div class="ref-item">[8] Verbeke, W., Dejaeger, K., Martens, D., Hur, J., &amp; Baesens, B. (2012). New insights into churn prediction in the telecommunication sector: A profit driven data mining approach. European Journal of Operational Research, 218(1), 211–229. https://doi.org/10.1016/j.ejor.2011.09.031</div>
+<div class="ref-item">[9] Saerens, M., Latinne, P., &amp; Decaestecker, C. (2002). Adjusting the Outputs of a Classifier to New a Priori Probabilities: A Simple Procedure. Neural Computation, 14(1), 21–41. https://doi.org/10.1162/089976602753284446</div>
+<div class="ref-item">[10] Chen, T., &amp; Guestrin, C. (2016). XGBoost: A Scalable Tree Boosting System. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD &#x27;16), 785–794. https://doi.org/10.1145/2939672.2939785</div>
+<div class="ref-item">[11] Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W., Ye, Q., &amp; Liu, T.-Y. (2017). LightGBM: A Highly Efficient Gradient Boosting Decision Tree. Advances in Neural Information Processing Systems (NeurIPS 2017), 30, 3149–3157. https://proceedings.neurips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html</div>
+<div class="ref-item">[12] Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825–2830. https://jmlr.org/papers/v12/pedregosa11a.html</div>
+<div class="ref-item">[13] Global Consumer Intelligence (GCI) &amp; Teradata Center at Duke University. (2026). GCI World 2026 September Final Assignment: Company A Telecom Dataset (Client.csv, Record.csv) and Dataset Overview. https://edu.omnicamp.us/en/courses/170/reports/125/</div>
+<div class="ref-item">[14] AI Assistance Disclosure (Google Antigravity / Gemini). (2026). AI Ideation, Literature Search, Code Verification &amp; Slide Layout Assistance Log — Shared Conversation Link: [REPLACE_WITH_SHARED_AI_CHAT_URL_BEFORE_SUBMISSION]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="sowhat-bar">
+      <strong>Reproducibility &amp; Auditability Note:</strong> Every metric in Slides 1–14 is programmatically verified against <code>outputs/results.json</code> generated by <code>submission/ACCOUNT_NAME.ipynb</code> (<code>SEED = 42</code>, 0 mismatches).
+    </div>
+    <div class="meta-bar">
+      <span>Author: Islam Raad | GCI World 2026 September Final Assignment | End of Presentation</span>
+      <span>Slide 15 / 15</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

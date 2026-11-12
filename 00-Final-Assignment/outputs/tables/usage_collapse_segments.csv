@@ -1,0 +1,8 @@
+segment,full_n,full_pct_customers,full_churn_rate,train_n,train_churn_rate,rev_mean_mu,rev_median_mu,pct_of_total_revenue,totrev_mean_mu
+Zero Usage (mou_Mean == 0),1615,1.62,0.7981,1120,0.7848,23.11,17.14,0.64,860.68
+Missing Usage (mou_Mean is NaN),357,0.36,0.6863,262,0.6947,,,0.0,965.17
+Missing Usage Change (change_mou is NaN),891,0.89,0.7609,630,0.7603,46.66,31.95,0.43,1036.42
+Near-Zero Usage (0 < mou_Mean <= 10),2233,2.23,0.549,1563,0.5509,24.65,20.17,0.94,706.44
+Very Low Usage (mou_Mean <= 10 incl. 0),3848,3.85,0.6536,2683,0.6485,24.0,19.99,1.58,771.18
+Low Usage (mou_Mean <= 30),7187,7.19,0.6078,4986,0.6105,25.67,23.46,3.15,736.51
+Active Baseline (mou_Mean > 30),92456,92.46,0.4862,64752,0.486,61.29,50.24,96.85,1055.15

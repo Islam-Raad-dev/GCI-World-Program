@@ -1,0 +1,5 @@
+drop_blk_rate,count,mean
+Q1 (Lowest),25000,0.5108
+Q2,25000,0.46928
+Q3,25000,0.48296
+Q4 (Highest),25000,0.51944

@@ -1,0 +1,101 @@
+column,source_file,dtype,n_missing,pct_missing,n_unique,doc_description
+rev_Mean,Record.csv,float64,357,0.357,37468,Mean monthly revenue (charge amount)
+mou_Mean,Record.csv,float64,357,0.357,9730,Mean number of monthly minutes of use
+totmrc_Mean,Record.csv,float64,357,0.357,8491,Mean total monthly recurring charge
+da_Mean,Record.csv,float64,357,0.357,172,Mean number of directory assisted calls
+ovrmou_Mean,Record.csv,float64,357,0.357,2638,Mean overage minutes of use
+ovrrev_Mean,Record.csv,float64,357,0.357,12315,Mean overage revenue
+vceovr_Mean,Record.csv,float64,357,0.357,7516,Mean revenue of voice overage
+datovr_Mean,Record.csv,float64,357,0.357,774,Mean revenue of data overage
+roam_Mean,Record.csv,float64,357,0.357,5337,Mean number of roaming calls
+change_mou,Record.csv,float64,891,0.891,7711,Percentage change in monthly minutes of use vs previous three month average
+change_rev,Record.csv,float64,891,0.891,32537,Percentage change in monthly revenue vs previous three month average
+drop_vce_Mean,Record.csv,float64,0,0.0,328,Mean number of dropped (failed) voice calls
+drop_dat_Mean,Record.csv,float64,0,0.0,60,Mean number of dropped (failed) data calls
+blck_vce_Mean,Record.csv,float64,0,0.0,442,Mean number of blocked (failed) voice calls
+blck_dat_Mean,Record.csv,float64,0,0.0,54,Mean number of blocked (failed) data calls
+unan_vce_Mean,Record.csv,float64,0,0.0,986,Mean number of unanswered voice calls
+unan_dat_Mean,Record.csv,float64,0,0.0,52,Mean number of unanswered data calls
+plcd_vce_Mean,Record.csv,float64,0,0.0,2907,Mean number of attempted voice calls placed
+plcd_dat_Mean,Record.csv,float64,0,0.0,389,Mean number of attempted data calls placed
+recv_vce_Mean,Record.csv,float64,0,0.0,1829,Mean number of received voice calls
+recv_sms_Mean,Record.csv,float64,0,0.0,94,NaN
+comp_vce_Mean,Record.csv,float64,0,0.0,2316,Mean number of completed voice calls
+comp_dat_Mean,Record.csv,float64,0,0.0,366,Mean number of completed data calls
+custcare_Mean,Record.csv,float64,0,0.0,209,Mean number of customer care calls
+ccrndmou_Mean,Record.csv,float64,0,0.0,458,Mean rounded minutes of use of customer care calls
+cc_mou_Mean,Record.csv,float64,0,0.0,9231,Mean unrounded minutes of use of customer care (see CUSTCARE_MEAN) calls
+inonemin_Mean,Record.csv,float64,0,0.0,1312,Mean number of inbound calls less than one minute
+threeway_Mean,Record.csv,float64,0,0.0,91,Mean number of three way calls
+mou_cvce_Mean,Record.csv,float64,0,0.0,68951,Mean unrounded minutes of use of completed voice calls
+mou_cdat_Mean,Record.csv,float64,0,0.0,4420,Mean unrounded minutes of use of completed data calls
+mou_rvce_Mean,Record.csv,float64,0,0.0,51988,Mean unrounded minutes of use of received voice calls
+owylis_vce_Mean,Record.csv,float64,0,0.0,882,Mean number of outbound wireless to wireless voice calls
+mouowylisv_Mean,Record.csv,float64,0,0.0,26847,Mean unrounded minutes of use of outbound wireless to wireless voice calls
+iwylis_vce_Mean,Record.csv,float64,0,0.0,536,NaN
+mouiwylisv_Mean,Record.csv,float64,0,0.0,21287,Mean unrounded minutes of use of inbound wireless to wireless voice calls
+peak_vce_Mean,Record.csv,float64,0,0.0,2125,Mean number of inbound and outbound peak voice calls
+peak_dat_Mean,Record.csv,float64,0,0.0,236,Mean number of peak data calls
+mou_peav_Mean,Record.csv,float64,0,0.0,64094,Mean unrounded minutes of use of peak voice calls
+mou_pead_Mean,Record.csv,float64,0,0.0,3168,Mean unrounded minutes of use of peak data calls
+opk_vce_Mean,Record.csv,float64,0,0.0,1928,Mean number of off-peak voice calls
+opk_dat_Mean,Record.csv,float64,0,0.0,257,Mean number of off-peak data calls
+mou_opkv_Mean,Record.csv,float64,0,0.0,59693,Mean unrounded minutes of use of off-peak voice calls
+mou_opkd_Mean,Record.csv,float64,0,0.0,3539,Mean unrounded minutes of use of off-peak data calls
+drop_blk_Mean,Record.csv,float64,0,0.0,514,Mean number of dropped or blocked calls
+attempt_Mean,Record.csv,float64,0,0.0,2918,Mean number of attempted calls
+complete_Mean,Record.csv,float64,0,0.0,2346,Mean number of completed calls
+callfwdv_Mean,Record.csv,float64,0,0.0,45,Mean number of call forwarding calls
+callwait_Mean,Record.csv,float64,0,0.0,263,Mean number of call waiting calls
+churn,Record.csv,int64,0,0.0,2,Instance of churn between 31-60 days after observation date
+months,Record.csv,int64,0,0.0,56,Total number of months in service
+Customer_ID,Both (Join Key),int64,0,0.0,100000,NaN
+uniqsubs,Client.csv,int64,0,0.0,15,Number of unique subscribers in the household
+actvsubs,Client.csv,int64,0,0.0,12,Number of active subscribers in household
+new_cell,Client.csv,str,0,0.0,3,New cell phone user
+crclscod,Client.csv,str,0,0.0,54,Credit class code
+asl_flag,Client.csv,str,0,0.0,2,Account spending limit
+totcalls,Client.csv,int64,0,0.0,12230,Total number of calls over the life of the customer
+totmou,Client.csv,float64,0,0.0,23752,Total minutes of use over the life of the customer
+totrev,Client.csv,float64,0,0.0,76104,Total revenue
+adjrev,Client.csv,float64,0,0.0,75274,Billing adjusted total revenue over the life of the customer
+adjmou,Client.csv,float64,0,0.0,23455,Billing adjusted total minutes of use over the life of the customer
+adjqty,Client.csv,int64,0,0.0,12185,Billing adjusted total number of calls over the life of the customer
+avgrev,Client.csv,float64,0,0.0,14863,Average monthly revenue over the life of the customer
+avgmou,Client.csv,float64,0,0.0,57931,Average monthly minutes of use over the life of the customer
+avgqty,Client.csv,float64,0,0.0,34704,Average monthly number of calls over the life of the customer
+avg3mou,Client.csv,int64,0,0.0,3108,Average monthly minutes of use over the previous three months
+avg3qty,Client.csv,int64,0,0.0,1438,Average monthly number of calls over the previous three months
+avg3rev,Client.csv,int64,0,0.0,507,Average monthly revenue over the previous three months
+avg6mou,Client.csv,float64,2839,2.839,2941,Average monthly minutes of use over the previous six months
+avg6qty,Client.csv,float64,2839,2.839,1376,Average monthly number of calls over the previous six months
+avg6rev,Client.csv,float64,2839,2.839,451,Average monthly revenue over the previous six months
+prizm_social_one,Client.csv,str,7388,7.388,5,Social group letter only
+area,Client.csv,str,40,0.04,19,Geogrpahic area
+dualband,Client.csv,str,1,0.001,4,Dualband
+refurb_new,Client.csv,str,1,0.001,2,Handset: refurbished or new
+hnd_price,Client.csv,float64,847,0.847,17,Current handset price
+phones,Client.csv,float64,1,0.001,24,Number of handsets issued
+models,Client.csv,float64,1,0.001,14,Number of models issued
+hnd_webcap,Client.csv,str,10189,10.189,3,Handset web capability
+truck,Client.csv,float64,1732,1.732,2,Truck indicator
+rv,Client.csv,float64,1732,1.732,2,RV indicator
+ownrent,Client.csv,str,33706,33.706,2,Home owner/renter status
+lor,Client.csv,float64,30190,30.19,16,Length of residence
+dwlltype,Client.csv,str,31909,31.909,2,Dwelling Unit type
+marital,Client.csv,str,1732,1.732,5,Marital Status
+adults,Client.csv,float64,23019,23.019,6,Number of adults in household
+infobase,Client.csv,str,22079,22.079,2,InfoBase match
+income,Client.csv,float64,25436,25.436,9,Estimated income
+numbcars,Client.csv,float64,49366,49.366,3,Known number of vehicles
+HHstatin,Client.csv,str,37923,37.923,6,Premier household status indicator
+dwllsize,Client.csv,str,38308,38.308,15,Dwelling size
+forgntvl,Client.csv,float64,1732,1.732,2,Foreign travel dummy variable
+ethnic,Client.csv,str,1732,1.732,17,Ethnicity roll-up code
+kid0_2,Client.csv,str,1732,1.732,2,Child 0 - 2 years of age in household
+kid3_5,Client.csv,str,1732,1.732,2,Child 3 - 5 years of age in household
+kid6_10,Client.csv,str,1732,1.732,2,Child 6 - 10 years of age in household
+kid11_15,Client.csv,str,1732,1.732,2,Child 11 - 15 years of age in household
+kid16_17,Client.csv,str,1732,1.732,2,Child 16 - 17 years of age in household
+creditcd,Client.csv,str,1732,1.732,2,Credit card indicator
+eqpdays,Client.csv,float64,1,0.001,1555,Number of days (age) of current equipment

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 260" width="100%" height="100%" font-family="Inter, DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0F172A"/>
+    </marker>
+  </defs>
+  <rect x="4" y="4" width="872" height="252" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="20" y="28" font-size="14.5" font-weight="700" fill="#0F172A">Plain-Language Intuition: How Gradient-Boosted Trees Score Individual Churn Risk</text>
+  <text x="20" y="46" font-size="11.5" fill="#475569">Instead of relying on a single rigid rule, 550 shallow decision trees sequentially add or subtract risk points based on lifecycle, usage, and care signals.</text>
+
+  <!-- Tree 1: Lifecycle & Handset -->
+  <rect x="20" y="62" width="205" height="176" rx="8" fill="#FFFFFF" stroke="#E11D48" stroke-width="1.8"/>
+  <rect x="20" y="62" width="205" height="28" rx="8" fill="#E11D48"/>
+  <text x="122" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group A: Device &amp; Tenure</text>
+  <text x="122" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Handset Age &gt; 300 Days?</text>
+  <line x1="85" y1="114" x2="62" y2="136" stroke="#64748B" stroke-width="1.5"/>
+  <line x1="155" y1="114" x2="178" y2="136" stroke="#E11D48" stroke-width="1.8"/>
+  <rect x="28" y="138" width="68" height="34" rx="5" fill="#F1F5F9"/>
+  <text x="62" y="153" text-anchor="middle" font-size="10" fill="#334155">No (≤300d)</text>
+  <text x="62" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#0D9488">-0.14 risk</text>
+  <rect x="132" y="138" width="84" height="34" rx="5" fill="#FFE4E6"/>
+  <text x="174" y="153" text-anchor="middle" font-size="10" fill="#881337">Yes (&gt;300d)</text>
+  <text x="174" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#E11D48">+0.21 risk</text>
+  <text x="32" y="196" font-size="10.2" fill="#334155">• Also checks Months 10–12 cliff</text>
+  <text x="32" y="212" font-size="10.2" fill="#334155">• Also checks Refurbished phone</text>
+  <text x="32" y="228" font-size="10.2" font-weight="700" fill="#E11D48">→ Direct Upgrade / Renewal Lever</text>
+
+  <text x="239" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#0F172A">+</text>
+
+  <!-- Tree 2: Usage Trajectory -->
+  <rect x="254" y="62" width="205" height="176" rx="8" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="1.8"/>
+  <rect x="254" y="62" width="205" height="28" rx="8" fill="#1D4ED8"/>
+  <text x="356" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group B: Usage Slump</text>
+  <text x="356" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Minutes Dropping vs 3m Avg?</text>
+  <line x1="319" y1="114" x2="296" y2="136" stroke="#64748B" stroke-width="1.5"/>
+  <line x1="389" y1="114" x2="412" y2="136" stroke="#1D4ED8" stroke-width="1.8"/>
+  <rect x="262" y="138" width="68" height="34" rx="5" fill="#F1F5F9"/>
+  <text x="296" y="153" text-anchor="middle" font-size="10" fill="#334155">Stable/Up</text>
+  <text x="296" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#0D9488">-0.08 risk</text>
+  <rect x="366" y="138" width="84" height="34" rx="5" fill="#DBEAFE"/>
+  <text x="408" y="153" text-anchor="middle" font-size="10" fill="#1E3A8A">Slump &gt;30%</text>
+  <text x="408" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#1D4ED8">+0.16 risk</text>
+  <text x="266" y="196" font-size="10.2" fill="#334155">• Checks change_mou &amp; ratio_3m</text>
+  <text x="266" y="212" font-size="10.2" fill="#334155">• Flags zero-MOU dormant SIMs</text>
+  <text x="266" y="228" font-size="10.2" font-weight="700" fill="#1D4ED8">→ Early-Warning Rescue Trigger</text>
+
+  <text x="473" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#0F172A">+</text>
+
+  <!-- Tree 3: Billing & Care Friction -->
+  <rect x="488" y="62" width="185" height="176" rx="8" fill="#FFFFFF" stroke="#D97706" stroke-width="1.8"/>
+  <rect x="488" y="62" width="185" height="28" rx="8" fill="#D97706"/>
+  <text x="580" y="80" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFFFFF">Tree Group C: Plan Fit</text>
+  <text x="580" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">Overage &amp; Care Calls?</text>
+  <rect x="500" y="122" width="160" height="50" rx="5" fill="#FEF3C7"/>
+  <text x="580" y="140" text-anchor="middle" font-size="10" fill="#92400E">High overage share +</text>
+  <text x="580" y="154" text-anchor="middle" font-size="10" fill="#92400E">no spending limit (ASL=N)</text>
+  <text x="580" y="168" text-anchor="middle" font-size="10" font-weight="700" fill="#D97706">+0.09 risk</text>
+  <text x="500" y="196" font-size="10.2" fill="#334155">• Checks totmrc &amp; ovrrev</text>
+  <text x="500" y="212" font-size="10.2" fill="#334155">• Checks custcare_Mean</text>
+  <text x="500" y="228" font-size="10.2" font-weight="700" fill="#D97706">→ Plan Right-Sizing Lever</text>
+
+  <line x1="675" y1="150" x2="700" y2="150" stroke="#0F172A" stroke-width="2.2" marker-end="url(#arr)"/>
+
+  <!-- Output Ranking Box -->
+  <rect x="704" y="62" width="156" height="176" rx="8" fill="#0F172A"/>
+  <text x="782" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#38BDF8">Calibrated Score p̂_i</text>
+  <rect x="716" y="102" width="132" height="36" rx="5" fill="#E11D48"/>
+  <text x="782" y="118" text-anchor="middle" font-size="10.5" font-weight="700" fill="#FFFFFF">Top 10% Risk Tier</text>
+  <text x="782" y="132" text-anchor="middle" font-size="10" fill="#FFE4E6">81.0% Sample Churn</text>
+  <rect x="716" y="146" width="132" height="34" rx="5" fill="#334155"/>
+  <text x="782" y="161" text-anchor="middle" font-size="10" font-weight="700" fill="#F8FAFC">Middle 80% Tier</text>
+  <text x="782" y="174" text-anchor="middle" font-size="9.5" fill="#CBD5E1">Monitor digitally</text>
+  <rect x="716" y="188" width="132" height="36" rx="5" fill="#0D9488"/>
+  <text x="782" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#FFFFFF">Bottom 10% Safe</text>
+  <text x="782" y="218" text-anchor="middle" font-size="10" fill="#CCFBF1">18.4% Sample Churn</text>
+</svg>

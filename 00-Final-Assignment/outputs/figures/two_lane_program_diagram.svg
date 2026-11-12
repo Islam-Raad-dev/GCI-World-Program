@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" width="100%" height="100%" font-family="Inter, DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arr-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#1D4ED8"/>
+    </marker>
+    <marker id="arr-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#0D9488"/>
+    </marker>
+  </defs>
+  <rect x="4" y="4" width="912" height="292" rx="10" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="20" y="28" font-size="15" font-weight="700" fill="#0F172A">Operational Architecture: Monthly Scoring, Two-Lane Offer Routing &amp; 80/20 Holdout Pilot</text>
+
+  <!-- Left Box: Monthly Batch Scoring -->
+  <rect x="18" y="48" width="192" height="228" rx="8" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.8"/>
+  <rect x="18" y="48" width="192" height="30" rx="8" fill="#0F172A"/>
+  <text x="114" y="68" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">1. Monthly Batch Scoring</text>
+  <text x="28" y="96" font-size="10.8" font-weight="700" fill="#0F172A">• Input Base: N = 100,000</text>
+  <text x="28" y="114" font-size="10.2" fill="#334155">  Compute 107 fair features</text>
+  <text x="28" y="134" font-size="10.8" font-weight="700" fill="#0F172A">• Score &amp; Filter Top-10%</text>
+  <text x="28" y="152" font-size="10.2" fill="#334155">  n = 10,000 highest-risk accts</text>
+  <text x="28" y="172" font-size="10.8" font-weight="700" fill="#E11D48">• Value Guardrail Filter</text>
+  <text x="28" y="190" font-size="10.2" fill="#334155">  Exclude dormant zero-MOU</text>
+  <text x="28" y="205" font-size="10.2" fill="#334155">  accounts (ARPU 23.11 MU)</text>
+  <text x="28" y="220" font-size="10.2" fill="#334155">  from costly human outreach;</text>
+  <text x="28" y="235" font-size="10.2" fill="#334155">  route to automated SMS only</text>
+
+  <line x1="210" y1="115" x2="238" y2="115" stroke="#1D4ED8" stroke-width="2.2" marker-end="url(#arr-b)"/>
+  <line x1="210" y1="215" x2="238" y2="215" stroke="#0D9488" stroke-width="2.2" marker-end="url(#arr-t)"/>
+
+  <!-- Middle Upper: Lane 1 -->
+  <rect x="242" y="48" width="402" height="106" rx="8" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2"/>
+  <rect x="242" y="48" width="402" height="28" rx="8" fill="#1D4ED8"/>
+  <text x="443" y="66" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">Lane 1: High-Value Usage-Slump &amp; Plan-Fit Rescue</text>
+  <text x="252" y="92" font-size="10.2" font-weight="700" fill="#0F172A">Target Trigger:</text>
+  <text x="336" y="92" font-size="9.8" fill="#334155">Top-10% risk + rev_Mean ≥ 30 MU + dropping MOU / overage</text>
+  <text x="252" y="112" font-size="10.2" font-weight="700" fill="#0F172A">Action / Offer:</text>
+  <text x="336" y="112" font-size="9.8" fill="#334155">Proactive care call + right-sized bundle / overage waiver + ASL</text>
+  <text x="252" y="132" font-size="10.2" font-weight="700" fill="#1D4ED8">Unit Economics:</text>
+  <text x="336" y="132" font-size="9.8" font-weight="700" fill="#0F172A">Cost c = 7.50 MU | Protected Value V = 328.83 MU (8m horizon)</text>
+
+  <!-- Middle Lower: Lane 2 -->
+  <rect x="242" y="170" width="402" height="106" rx="8" fill="#FFFFFF" stroke="#0D9488" stroke-width="2"/>
+  <rect x="242" y="170" width="402" height="28" rx="8" fill="#0D9488"/>
+  <text x="443" y="188" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">Lane 2: Pre-300-Day Handset Refresh &amp; Month 8–9 Check</text>
+  <text x="252" y="214" font-size="10.2" font-weight="700" fill="#0F172A">Target Trigger:</text>
+  <text x="336" y="214" font-size="9.8" fill="#334155">eqpdays in [240, 300] days (or Month 8–9) + rev_Mean ≥ 30 MU</text>
+  <text x="252" y="234" font-size="10.2" font-weight="700" fill="#0F172A">Action / Offer:</text>
+  <text x="336" y="234" font-size="9.8" fill="#334155">Installment handset trade-in voucher + 12m loyalty bonus</text>
+  <text x="252" y="254" font-size="10.2" font-weight="700" fill="#0D9488">Cohort Size:</text>
+  <text x="336" y="254" font-size="9.8" font-weight="700" fill="#0F172A">8,815 eligible accts in 100k (ARPU = 66.91 MU; c = 4.00 MU)</text>
+
+  <line x1="644" y1="101" x2="670" y2="140" stroke="#1D4ED8" stroke-width="2" marker-end="url(#arr-b)"/>
+  <line x1="644" y1="223" x2="670" y2="180" stroke="#0D9488" stroke-width="2" marker-end="url(#arr-t)"/>
+
+  <!-- Right Box: 90-Day Randomized Holdout Pilot -->
+  <rect x="674" y="48" width="226" height="228" rx="8" fill="#FFFBEB" stroke="#D97706" stroke-width="2"/>
+  <rect x="674" y="48" width="226" height="30" rx="8" fill="#D97706"/>
+  <text x="787" y="68" text-anchor="middle" font-size="11.8" font-weight="700" fill="#FFFFFF">3. 90-Day A/B Holdout Gate</text>
+  <rect x="688" y="88" width="198" height="44" rx="6" fill="#FFFFFF" stroke="#0D9488" stroke-width="1.5"/>
+  <text x="787" y="106" text-anchor="middle" font-size="10.8" font-weight="700" fill="#0D9488">80% Treatment Group</text>
+  <text x="787" y="122" text-anchor="middle" font-size="9.8" fill="#334155">Receives Lane 1 / Lane 2 offer</text>
+  <rect x="688" y="140" width="198" height="44" rx="6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+  <text x="787" y="158" text-anchor="middle" font-size="10.8" font-weight="700" fill="#475569">20% Randomized Control</text>
+  <text x="787" y="174" text-anchor="middle" font-size="9.8" fill="#334155">Standard BAU experience</text>
+  <text x="688" y="204" font-size="10.8" font-weight="700" fill="#92400E">Scale-Up Gate Criteria:</text>
+  <text x="688" y="222" font-size="10.0" fill="#334155">• Verified uplift s ≥ 7.0% (break-even)</text>
+  <text x="688" y="238" font-size="10.0" fill="#334155">• Target Base Case s ≥ 15%–20%</text>
+  <text x="688" y="254" font-size="10.0" fill="#334155">• Positive net margin after offer cost</text>
+</svg>

@@ -1,0 +1,12 @@
+subgroup,n_260_300,churn_260_300,n_301_340,churn_301_340,jump_pp
+All Train Customers,4792,0.3685,6774,0.6069,23.83
+Tenure >= 10 Months Only,3090,0.4123,6774,0.6069,19.46
+Tenure >= 13 Months Only (Post-Cliff),1510,0.4781,1443,0.508,2.98
+Single-Handset Customers (phones == 1),2869,0.291,4932,0.6318,34.08
+Multi-Handset Customers (phones >= 2),1923,0.4841,1842,0.5402,5.6
+New Handsets Only (refurb_new == 'N'),4128,0.3423,6087,0.6065,26.42
+Refurbished Handsets (refurb_new == 'R'),664,0.5316,687,0.6099,7.83
+Credit Class AA,1897,0.3411,3152,0.6342,29.31
+Credit Class A,493,0.3955,587,0.5417,14.62
+Area: NEW YORK CITY AREA,505,0.3327,692,0.6257,29.3
+Area: CALIFORNIA NORTH AREA,233,0.3863,369,0.5908,20.45
