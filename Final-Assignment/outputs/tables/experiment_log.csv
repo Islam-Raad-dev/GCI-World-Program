@@ -1,0 +1,8 @@
+id,name,change,features,params,cv_auc_mean,cv_auc_std,cv_acc_mean,cv_acc_std,train_auc_mean,train_acc_mean,runtime_sec
+M0,Majority Class Baseline,Predict majority class (0 = Stayed),No-Ethnic (125),strategy=most_frequent,0.5,0.0,0.5044,0.0,0.5,0.5044,0.47
+M1,Logistic Regression (Pipeline + Engineered),Linear baseline with median impute + scaling + OHE + 28 features,No-Ethnic (125),"C=0.1, max_iter=300",0.6603,0.004,0.6163,0.0027,0.665,0.6196,31.21
+M2,Shallow Decision Tree (depth=4),Interpretable 16-leaf decision tree,No-Ethnic (125),"max_depth=4, min_samples_leaf=200",0.64,0.003,0.594,0.0015,0.644,0.5968,37.29
+M3,"XGBoost Tutorial Params (Raw 97, No ethnic)","Leakage-safe OrdinalEncoder + native NaN, tutorial params",Raw No-Ethnic (97),"n_estimators=300, lr=0.05, max_depth=6",0.6924,0.0018,0.639,0.0016,0.8319,0.7494,90.2
+M4,XGBoost + 28 Engineered Features,Add 28 lifecycle/usage/quality/economics features to M3,No-Ethnic (125),"n_estimators=300, lr=0.05, max_depth=6",0.7,0.0016,0.642,0.0015,0.8407,0.7587,116.47
+M5,XGBoost Tuned & Regularized (Final Model),"Regularized XGBoost (depth=6, mcw=15, L1=1.0, L2=10.0, sub=0.75, col=0.80)",No-Ethnic (125),"n_estimators=400, lr=0.04, max_depth=6, mcw=15, reg_alpha=1, reg_lambda=10",0.7017,0.0015,0.645,0.0025,0.8096,0.732,131.93
+M6,LightGBM + 28 Engineered Features,Independent LightGBM check with same feature set,No-Ethnic (125),"n_estimators=300, lr=0.05, num_leaves=31",0.7001,0.002,0.6417,0.0035,0.8071,0.7278,85.06
