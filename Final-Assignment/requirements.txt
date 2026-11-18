@@ -1,5 +1,3 @@
-# Exact library versions from Google Colab execution (Python 3.13.18, notebooks/churn_prediction.ipynb)
-# All saved results and figures were produced in Google Colab with these versions.
 pandas==2.2.3
 numpy==2.4.6
 scikit-learn==1.6.1
